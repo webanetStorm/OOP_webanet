@@ -16,7 +16,7 @@ int Triangle::Perimetr()
 
 double Triangle::Square()
 {
-	int p = ( _a + _b + _c ) / 2;
+	int p = Perimetr() / 2;
 
 	return sqrt( p * ( p - _a ) * ( p - _b ) * ( p - _c ) );
 }
