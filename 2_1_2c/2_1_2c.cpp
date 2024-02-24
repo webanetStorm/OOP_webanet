@@ -13,7 +13,7 @@ int main()
 
 	Triangle ABC( a, b, c );
 
-	cout << "P=" << ABC.Perimetr() << endl << "S=" << ABC.Square();
+	cout << "P = " << ABC.Perimetr() << endl << "S = " << ABC.Square();
 
 
 	return 0;
