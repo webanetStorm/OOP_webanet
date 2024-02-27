@@ -15,16 +15,10 @@ long long int Number::GetN()
 
 void Number::CountDigits()
 {
-	long long int tempN = _n;
+	long long int tempN = _n * ( ( _n > 0 ) - ( _n < 0 ) );
 
-	if ( _n < 0 )
-		_n *= -1;
-
-	while ( tempN > 0 )
-	{
+	for ( _count = 0; tempN > 0; _count++ )
 		tempN = tempN / 10;
-		_count++;
-	}
 
 	if ( _n == 0 )
 		_count = 1;
