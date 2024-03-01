@@ -6,54 +6,29 @@ Application::Application( Base* pParentObject ) : Base( pParentObject ) {}
 
 void Application::BuildTreeObjects()
 {
-    string line;
-    cin >> line;
+    string parentName, childName;
+    Base *pParentObject = this, *pChildObject = nullptr;
 
-    this->SetObjectName( line );
+    cin >> parentName;
+    this->SetObjectName( parentName );
 
-
-    while ( true )
+    while ( cin >> parentName >> childName )
     {
-
-        cin >> line;
-        if ( line.empty() )
+        if ( parentName == childName )
             break;
 
-        size_t spaceIndex = line.find( ' ' );
-        if ( spaceIndex == string::npos ) 
-            continue;
+        if ( pChildObject != nullptr && parentName == pChildObject->GetObjectName() )
+            pParentObject = pChildObject;
 
-        string parentName = line.substr( 0, spaceIndex ), childName = line.substr( spaceIndex + 1 );
-        if ( parentName == childName ) 
-            break;
-
-
-        Base* parentObject = nullptr;
-
-        if ( this->GetObjectName() == parentName )
-        {
-            parentObject = this;
-        }
-        else
-        {
-            for ( Base* obj : this->_childObjects )
-            {
-                if ( obj->GetObjectName() == parentName )
-                {
-                    parentObject = obj;
-                    break;
-                }
-            }
-        }
-
-        if ( parentObject )
-            new Base( parentObject, childName );
-
+        if ( pParentObject->GetChildByName( childName ) == nullptr && parentName == pParentObject->GetObjectName() )
+            pChildObject = new Base( pParentObject, childName );
     }
 }
 
 int Application::ExecApp()
 {
+    cout << this->GetObjectName();
+
     this->DisplayHierarchy();
 
     return 0;

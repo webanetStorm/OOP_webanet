@@ -11,19 +11,18 @@ class Base
 
 private:
 
-    string _objectName = "Base_Object";
+    string _objectName;
     
-    Base* _pParentObject = nullptr;
-
-
-protected:
+    Base* _pParentObject;
 
     vector<Base*> _childObjects;
 
 
 public:
 
-    Base( Base* pParentObject = nullptr, string objectName = "Base_Object" );
+    Base( Base* pParentObject, string objectName = "Base_Object" );
+
+    ~Base();
 
     bool SetObjectName( string name );
 
@@ -31,8 +30,8 @@ public:
 
     Base* GetParentObject();
 
-    void DisplayHierarchy( int level = 0 );
+    Base* GetChildByName( string name );
 
-    void AddChild( Base* pChild );
+    void DisplayHierarchy();
 
 };

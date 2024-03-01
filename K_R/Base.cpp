@@ -11,6 +11,12 @@ Base::Base( Base* pParentObject, string objectName )
 		pParentObject->_childObjects.push_back( this );
 }
 
+Base::~Base()
+{
+	for ( Base* child : this->_childObjects )
+		delete child;
+}
+
 bool Base::SetObjectName( string name )
 {
 	if ( this->_pParentObject )
@@ -33,15 +39,26 @@ Base* Base::GetParentObject()
 	return this->_pParentObject;
 }
 
-void Base::DisplayHierarchy( int level )
+Base* Base::GetChildByName( string name )
 {
-	cout << string( level * 2, ' ' ) << this->_objectName << endl;
-
 	for ( auto child : this->_childObjects )
-		child->DisplayHierarchy( level + 1 );
+		if ( child->GetObjectName() == name )
+			return child;
+
+	return nullptr;
 }
 
-void Base::AddChild( Base* pChild )
+void Base::DisplayHierarchy()
 {
-	this->_childObjects.push_back( pChild );
+	if ( this->_childObjects.size() != 0 )
+	{
+		cout << endl << this->GetObjectName();
+
+		for ( auto elem : this->_childObjects )
+		{
+			cout << "  " << elem->GetObjectName();
+			elem->DisplayHierarchy();
+		}
+	}
+
 }
