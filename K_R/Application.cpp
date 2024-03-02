@@ -6,8 +6,8 @@ Application::Application( Base* pParentObject ) : Base( pParentObject ) {}
 
 void Application::BuildTreeObjects()
 {
-    string parentName, childName;
     Base *pParentObject = this, *pChildObject = nullptr;
+    string parentName, childName;
 
     cin >> parentName;
     this->SetObjectName( parentName );
