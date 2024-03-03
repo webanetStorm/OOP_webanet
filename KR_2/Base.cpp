@@ -13,14 +13,14 @@ Base::Base( Base* pParentObject, string objectName )
 
 Base::~Base()
 {
-	for ( Base* pChild : this->_childObjects )
+	for ( auto pChild : this->_childObjects )
 		delete pChild;
 }
 
 bool Base::SetObjectName( string name )
 {
 	if ( this->_pParentObject )
-		for ( Base* pChild : this->_pParentObject->_childObjects )
+		for ( auto pChild : this->_pParentObject->_childObjects )
 			if ( pChild->GetObjectName() == name )
 				return false;
 
@@ -41,7 +41,7 @@ Base* Base::GetParentObject()
 
 Base* Base::GetChildByName( string name )
 {
-	for ( Base* pChild : this->_childObjects )
+	for ( auto pChild : this->_childObjects )
 		if ( pChild->GetObjectName() == name )
 			return pChild;
 
@@ -53,32 +53,40 @@ Base* Base::FindOnBranch( string name )
 	if ( this->_objectName == name ) 
 		return this;
 
-	for ( Base* pChild : this->_childObjects )
+	for ( auto pChild : this->_childObjects )
 		if ( Base* found = pChild->FindOnBranch( name ) )
 			return found;
 
 	return nullptr;
 }
 
-void Base::DisplayHierarchy()
+Base* Base::FindOnTree( string name )
 {
-	if ( this->_childObjects.size() != 0 )
-	{
-		cout << endl << this->GetObjectName();
+	Base* current = this;
 
-		for ( Base* pChild : this->_childObjects )
-		{
-			cout << "  " << pChild->GetObjectName();
-			pChild->DisplayHierarchy();
-		}
-	}
+	while ( current->_pParentObject != nullptr )
+		current = current->_pParentObject;
 
+	return current->FindOnBranch( name );
 }
 
-void Base::TreeTraversal( int level )
+void Base::DisplayHierarchy( int level )
 {
 	cout << endl << string( level * 4, ' ' ) << this->_objectName;
 
 	for ( auto pChild : this->_childObjects )
-		pChild->TreeTraversal( level + 1 );
+		pChild->DisplayHierarchy( level + 1 );
+}
+
+void Base::DisplayHierarchyWithReadiness( int level )
+{
+	cout << endl << string( level * 4, ' ' ) << this->_objectName << ( this->_readiness == 0 ? " is not ready" : " is ready" ) << endl;
+
+	for ( auto pChild : this->_childObjects )
+		pChild->DisplayHierarchyWithReadiness( level + 1 );
+}
+
+void Base::SetReadiness( int state )
+{
+	this->_readiness = state;
 }

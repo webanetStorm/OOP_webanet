@@ -6,15 +6,17 @@ Application::Application( Base* pParentObject ) : Base( pParentObject ) {}
 
 void Application::BuildTreeObjects()
 {
-    Base* pParentObject = this, * pChildObject = nullptr;
+    Base *pParentObject = this, *pChildObject = nullptr;
     string parentName, childName;
+    int classNumber;
+
 
     cin >> parentName;
     this->SetObjectName( parentName );
 
-    while ( cin >> parentName >> childName )
+    while ( cin >> parentName >> childName >> classNumber )
     {
-        if ( parentName == childName )
+        if ( parentName == "endtree" )
             break;
 
         if ( pChildObject != nullptr && parentName == pChildObject->GetObjectName() )
@@ -29,7 +31,7 @@ int Application::ExecApp()
 {
     cout << this->GetObjectName();
 
-    this->TreeTraversal();
+    this->DisplayHierarchy();
 
     return 0;
 }

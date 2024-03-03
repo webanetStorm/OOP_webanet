@@ -36,8 +36,12 @@ public:
 
     Base* FindOnBranch( string name );
 
-    void DisplayHierarchy();
+    Base* FindOnTree( string name );
 
-    void TreeTraversal( int level = 0 );
+    void DisplayHierarchy( int level = 0 );
+
+    void DisplayHierarchyWithReadiness( int level = 0 );
+
+    void SetReadiness( int state );
 
 };

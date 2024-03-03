@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Base.h"
+#include "Class1.h"
 
 
 class Application : public Base

@@ -21,7 +21,7 @@ void Application::BuildTreeObjects()
             pParentObject = pChildObject;
 
         if ( pParentObject->GetChildByName( childName ) == nullptr && parentName == pParentObject->GetObjectName() )
-            pChildObject = new Base( pParentObject, childName );
+            pChildObject = new Class1( pParentObject, childName );
     }
 }
 
