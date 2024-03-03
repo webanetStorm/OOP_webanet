@@ -13,7 +13,7 @@ Base::Base( Base* pParentObject, string objectName )
 
 Base::~Base()
 {
-	for ( Base* child : this->_childObjects )
+	for ( auto child : this->_childObjects )
 		delete child;
 }
 
