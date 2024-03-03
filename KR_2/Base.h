@@ -20,6 +20,11 @@ private:
     vector<Base*> _childObjects;
 
 
+    Base* Find( string name );
+
+    int CountOnBranch( string name );
+
+
 public:
 
     Base( Base* pParentObject, string objectName = "Base_Object" );
@@ -34,9 +39,9 @@ public:
 
     Base* GetChildByName( string name );
 
-    Base* FindOnBranch( string name );
-
     Base* FindOnTree( string name );
+
+    Base* FindOnBranch( string name );
 
     void DisplayHierarchy( int level = 0 );
 

@@ -48,13 +48,13 @@ Base* Base::GetChildByName( string name )
 	return nullptr;
 }
 
-Base* Base::FindOnBranch( string name )
+Base* Base::Find( string name )
 {
 	if ( this->_objectName == name ) 
 		return this;
 
 	for ( auto pChild : this->_childObjects )
-		if ( Base* found = pChild->FindOnBranch( name ) )
+		if ( Base* found = pChild->Find( name ) )
 			return found;
 
 	return nullptr;
@@ -67,7 +67,28 @@ Base* Base::FindOnTree( string name )
 	while ( current->_pParentObject != nullptr )
 		current = current->_pParentObject;
 
-	return current->FindOnBranch( name );
+	return current->Find( name );
+}
+
+Base* Base::FindOnBranch( string name )
+{
+	if ( this->CountOnBranch( name ) != 1 )
+		return nullptr;
+
+	return Find( name );
+}
+
+int Base::CountOnBranch( string name )
+{
+	int result = 0;
+
+	if ( this->_objectName == name )
+		result++;
+
+	for ( auto pChild : this->_childObjects )
+		result += pChild->CountOnBranch( name );
+
+	return result;
 }
 
 void Base::DisplayHierarchy( int level )
@@ -80,7 +101,7 @@ void Base::DisplayHierarchy( int level )
 
 void Base::DisplayHierarchyWithReadiness( int level )
 {
-	cout << endl << string( level * 4, ' ' ) << this->_objectName << ( this->_readiness == 0 ? " is not ready" : " is ready" ) << endl;
+	cout << endl << string( level * 4, ' ' ) << this->_objectName << ( this->_readiness == 0 ? " is not ready" : " is ready" );
 
 	for ( auto pChild : this->_childObjects )
 		pChild->DisplayHierarchyWithReadiness( level + 1 );

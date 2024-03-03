@@ -8,7 +8,7 @@ void Application::BuildTreeObjects()
 {
     Base *pParentObject = this, *pChildObject = nullptr;
     string parentName, childName;
-    int classNumber;
+    int classNumber, stateNumber;
 
 
     cin >> parentName;
@@ -19,11 +19,34 @@ void Application::BuildTreeObjects()
         if ( parentName == "endtree" )
             break;
 
-        if ( pChildObject != nullptr && parentName == pChildObject->GetObjectName() )
-            pParentObject = pChildObject;
+        pParentObject = this->FindOnTree( parentName );
 
-        if ( pParentObject->GetChildByName( childName ) == nullptr && parentName == pParentObject->GetObjectName() )
-            pChildObject = new Base( pParentObject, childName );
+        switch ( classNumber )
+        {
+            case 2:
+                new Class2( pParentObject, childName );
+                break;
+            case 3:
+                new Class3( pParentObject, childName );
+                break;
+            case 4:
+                new Class4( pParentObject, childName );
+                break;
+            case 5:
+                new Class5( pParentObject, childName );
+                break;
+            case 6:
+                new Class6( pParentObject, childName );
+                break;
+        }
+    }
+
+    while ( cin >> parentName >> stateNumber )
+    {
+        pParentObject = this->FindOnTree( parentName );
+
+        if ( pParentObject )
+            pParentObject->SetReadiness( stateNumber );
     }
 }
 
@@ -31,7 +54,12 @@ int Application::ExecApp()
 {
     cout << this->GetObjectName();
 
+    cout << "\nObject tree";
     this->DisplayHierarchy();
+
+    cout << "\nThe tree of objects and their readiness";
+    this->DisplayHierarchyWithReadiness();
+
 
     return 0;
 }
