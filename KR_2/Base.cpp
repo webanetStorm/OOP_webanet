@@ -13,15 +13,15 @@ Base::Base( Base* pParentObject, string objectName )
 
 Base::~Base()
 {
-	for ( Base* child : this->_childObjects )
-		delete child;
+	for ( Base* pChild : this->_childObjects )
+		delete pChild;
 }
 
 bool Base::SetObjectName( string name )
 {
 	if ( this->_pParentObject )
-		for ( auto child : this->_pParentObject->_childObjects )
-			if ( child->GetObjectName() == name )
+		for ( Base* pChild : this->_pParentObject->_childObjects )
+			if ( pChild->GetObjectName() == name )
 				return false;
 
 	this->_objectName = name;
@@ -41,9 +41,21 @@ Base* Base::GetParentObject()
 
 Base* Base::GetChildByName( string name )
 {
-	for ( auto child : this->_childObjects )
-		if ( child->GetObjectName() == name )
-			return child;
+	for ( Base* pChild : this->_childObjects )
+		if ( pChild->GetObjectName() == name )
+			return pChild;
+
+	return nullptr;
+}
+
+Base* Base::FindOnBranch( string name )
+{
+	if ( this->_objectName == name ) 
+		return this;
+
+	for ( Base* pChild : this->_childObjects )
+		if ( Base* found = pChild->FindOnBranch( name ) )
+			return found;
 
 	return nullptr;
 }
@@ -54,11 +66,19 @@ void Base::DisplayHierarchy()
 	{
 		cout << endl << this->GetObjectName();
 
-		for ( auto elem : this->_childObjects )
+		for ( Base* pChild : this->_childObjects )
 		{
-			cout << "  " << elem->GetObjectName();
-			elem->DisplayHierarchy();
+			cout << "  " << pChild->GetObjectName();
+			pChild->DisplayHierarchy();
 		}
 	}
 
+}
+
+void Base::TreeTraversal( int level )
+{
+	cout << endl << string( level * 4, ' ' ) << this->_objectName;
+
+	for ( auto pChild : this->_childObjects )
+		pChild->TreeTraversal( level + 1 );
 }

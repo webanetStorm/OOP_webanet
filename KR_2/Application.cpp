@@ -29,7 +29,7 @@ int Application::ExecApp()
 {
     cout << this->GetObjectName();
 
-    this->DisplayHierarchy();
+    this->TreeTraversal();
 
     return 0;
 }

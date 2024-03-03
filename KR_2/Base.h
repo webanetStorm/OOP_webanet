@@ -11,6 +11,8 @@ class Base
 
 private:
 
+    int _readiness = 0;
+
     string _objectName;
 
     Base* _pParentObject;
@@ -32,6 +34,10 @@ public:
 
     Base* GetChildByName( string name );
 
+    Base* FindOnBranch( string name );
+
     void DisplayHierarchy();
+
+    void TreeTraversal( int level = 0 );
 
 };
