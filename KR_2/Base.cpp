@@ -109,5 +109,20 @@ void Base::DisplayHierarchyWithReadiness( int level )
 
 void Base::SetReadiness( int state )
 {
-	this->_readiness = state;
+	if ( state != 0 )
+	{
+		Base* current = this->_pParentObject;
+
+		while ( current != nullptr && current->_readiness != 0 )
+			current = current->_pParentObject;
+
+		this->_readiness = state;
+	}
+	else
+	{
+		this->_readiness = state;
+
+		for ( auto pChild : this->_childObjects )
+			pChild->SetReadiness( state );
+	}
 }

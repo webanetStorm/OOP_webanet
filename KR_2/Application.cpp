@@ -21,23 +21,26 @@ void Application::BuildTreeObjects()
 
         pParentObject = this->FindOnTree( parentName );
 
-        switch ( classNumber )
+        if ( pParentObject && pParentObject->GetChildByName( childName ) == nullptr )
         {
-            case 2:
-                new Class2( pParentObject, childName );
-                break;
-            case 3:
-                new Class3( pParentObject, childName );
-                break;
-            case 4:
-                new Class4( pParentObject, childName );
-                break;
-            case 5:
-                new Class5( pParentObject, childName );
-                break;
-            case 6:
-                new Class6( pParentObject, childName );
-                break;
+            switch ( classNumber )
+            {
+                case 2:
+                    pChildObject = new Class2( pParentObject, childName );
+                    break;
+                case 3:
+                    pChildObject = new Class3( pParentObject, childName );
+                    break;
+                case 4:
+                    pChildObject = new Class4( pParentObject, childName );
+                    break;
+                case 5:
+                    pChildObject = new Class5( pParentObject, childName );
+                    break;
+                case 6:
+                    pChildObject = new Class6( pParentObject, childName );
+                    break;
+            }
         }
     }
 
