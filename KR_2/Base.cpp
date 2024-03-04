@@ -116,7 +116,8 @@ void Base::SetReadiness( int state )
 		while ( current != nullptr && current->_readiness != 0 )
 			current = current->_pParentObject;
 
-		this->_readiness = state;
+		if ( current == nullptr )
+			this->_readiness = state;
 	}
 	else
 	{
