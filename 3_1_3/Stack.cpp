@@ -32,11 +32,6 @@ bool Stack::Pop( int& value )
     return false;
 }
 
-vector<int> Stack::GetElements()
-{
-    return _elements;
-}
-
 string Stack::GetName() 
 {
     return _name;

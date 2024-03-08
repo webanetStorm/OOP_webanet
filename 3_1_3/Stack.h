@@ -26,8 +26,6 @@ public:
 
 	bool Pop( int& );
 
-	vector<int> GetElements();
-
 	string GetName();
 
 	int GetSize();
