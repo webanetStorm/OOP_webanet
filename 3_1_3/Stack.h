@@ -1,7 +1,7 @@
 #pragma once
 
-#include <vector>
 #include <string>
+
 
 using namespace std;
 
@@ -15,12 +15,16 @@ private:
 
 	int _size;
 
-	vector<int> _elements;
+	int _currentSize;
+
+	int* _elements;
 
 
 public:
 
 	Stack( string, int );
+
+	~Stack();
 
 	bool Push( int );
 

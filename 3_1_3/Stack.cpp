@@ -1,17 +1,21 @@
 #include "Stack.h"
 
 
-Stack::Stack( string name, int size ) : _name( name ), _size( size )
+Stack::Stack( string name, int size ) : _name( name ), _size( size > 0 ? size : 1 ), _currentSize( 0 )
 {
-    if ( size < 1 )
-        _size = 1;
+    _elements = new int[_size];
+}
+
+Stack::~Stack()
+{
+    delete[] _elements;
 }
 
 bool Stack::Push( int value )
 {
-    if ( _elements.size() < _size )
+    if ( _currentSize < _size )
     {
-        _elements.push_back( value );
+        _elements[_currentSize++] = value;
 
         return true;
     }
@@ -21,10 +25,9 @@ bool Stack::Push( int value )
 
 bool Stack::Pop( int& value )
 {
-    if ( !_elements.empty() )
+    if ( _currentSize > 0 )
     {
-        value = _elements.back();
-        _elements.pop_back();
+        value = _elements[--_currentSize];
 
         return true;
     }
@@ -44,5 +47,5 @@ int Stack::GetSize()
 
 int Stack::GetCurrentSize()
 {
-    return _elements.size();
+    return _currentSize;
 }

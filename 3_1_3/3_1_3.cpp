@@ -6,20 +6,22 @@
 int main()
 {
     string name;
-    int size, value;
+    int size1, size2, value;
 
-    cin >> name >> size;
-    Stack stack1( name, size );
+    cin >> name >> size1;
+    Stack stack1( name, size1 );
 
-    cin >> name >> size;
-    Stack stack2( name, size );
+    cin >> name >> size2;
+    Stack stack2( name, size2 );
 
 
-    while ( cin >> value )
+    for ( int i = 0; i < max( size1, size2 ); i++ )
     {
+        cin >> value;
+
         if ( !stack1.Push( value ) )
             break;
-        if ( !stack2.Push( value ) ) 
+        if ( !stack2.Push( value ) )
             break;
     }
 
