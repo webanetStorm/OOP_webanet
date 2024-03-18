@@ -14,10 +14,15 @@ void Application::BuildTreeObjects()
     cin >> parentName;
     this->SetObjectName( parentName );
 
-    while ( cin >> parentName >> childName >> classNumber )
+    while ( true )
     {
+        cin >> parentName;
+
         if ( parentName == "endtree" )
             break;
+
+
+        cin >> childName >> classNumber;
 
         pParentObject = this->FindOnTree( parentName );
 

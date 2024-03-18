@@ -2,11 +2,8 @@
 #include "Base.h"
 
 
-Base::Base( Base* pParentObject, string objectName )
+Base::Base( Base* pParentObject, string objectName ) : _pParentObject( pParentObject ), _objectName( objectName ), _readiness( 0 )
 {
-	this->_pParentObject = pParentObject;
-	this->_objectName = objectName;
-
 	if ( pParentObject )
 		pParentObject->_childObjects.push_back( this );
 }

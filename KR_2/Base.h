@@ -11,7 +11,7 @@ class Base
 
 private:
 
-    int _readiness = 0;
+    int _readiness;
 
     string _objectName;
 
