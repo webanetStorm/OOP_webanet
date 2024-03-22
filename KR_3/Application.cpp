@@ -2,71 +2,113 @@
 #include <iostream>
 
 
-Application::Application( Base* pParentObject ) : Base( pParentObject )
-{
-}
+Application::Application( Base* pParentObject ) : Base( pParentObject ) {}
 
 void Application::BuildTreeObjects()
 {
-	Base* pParentObject = this, * pChildObject = nullptr;
-	string parentName, childName;
-	int classNumber, stateNumber;
+	Base *pParentObject = this, *pCurrentObject = this, *pObj;
+	string parentPath, childName, command, parameter;
+	int classNumber;
 
 
-	cin >> parentName;
-	this->SetObjectName( parentName );
+	cin >> parentPath;
+	this->SetObjectName( parentPath );
 
 	while ( true )
 	{
-		cin >> parentName;
+		cin >> parentPath;
 
-		if ( parentName == "endtree" )
+		if ( parentPath == "endtree" )
 			break;
 
 
 		cin >> childName >> classNumber;
 
-		pParentObject = this->FindOnTree( parentName );
+		pParentObject = this->FindObjectByPath( parentPath );
 
 		if ( pParentObject && pParentObject->GetChildByName( childName ) == nullptr )
 		{
 			switch ( classNumber )
 			{
 				case 2:
-					pChildObject = new Class2( pParentObject, childName );
+					new Class2( pParentObject, childName );
 					break;
 				case 3:
-					pChildObject = new Class3( pParentObject, childName );
+					new Class3( pParentObject, childName );
 					break;
 				case 4:
-					pChildObject = new Class4( pParentObject, childName );
+					new Class4( pParentObject, childName );
 					break;
 				case 5:
-					pChildObject = new Class5( pParentObject, childName );
+					new Class5( pParentObject, childName );
 					break;
 				case 6:
-					pChildObject = new Class6( pParentObject, childName );
+					new Class6( pParentObject, childName );
 					break;
 			}
 		}
 	}
 
-	while ( cin >> parentName >> stateNumber )
+	while ( cin >> command )
 	{
-		pParentObject = this->FindOnTree( parentName );
-
-		if ( pParentObject )
-			pParentObject->SetReadiness( stateNumber );
+		if ( command == "SET" )
+		{
+			cin >> parameter;
+			Base* obj = this->FindObjectByPath( parameter );
+			if ( obj )
+			{
+				pCurrentObject = obj;
+				cout << "Object is set: " << obj->GetObjectName() << endl;
+			}
+			else
+			{
+				cout << "The object was not found at the specified coordinate: " << parameter << endl;
+			}
+		}
+		else if ( command == "FIND" )
+		{
+			cin >> parameter;
+			Base* obj = pCurrentObject->FindObjectByPath( parameter );
+			if ( obj )
+			{
+				cout << parameter << "     Object name: " << obj->GetObjectName() << endl;
+			}
+			else
+			{
+				cout << parameter << "     Object is not found" << endl;
+			}
+		}
+		else if ( command == "MOVE" )
+		{
+			cin >> parameter;
+			Base* newParent = pCurrentObject->FindObjectByPath( parameter );
+			if ( pCurrentObject->SetNewParent( newParent ) )
+			{
+				cout << "New head object: " << newParent->GetObjectName() << endl;
+			}
+			else
+			{
+				cout << "Redefining the head object failed" << endl;
+			}
+		}
+		else if ( command == "DELETE" )
+		{
+			cin >> parameter;
+			pCurrentObject->DeleteChildByName( parameter );
+			cout << "The object " << parameter << " has been deleted" << endl;
+		}
+		else if ( command == "END" )
+		{
+			break; // Завершение программы
+		}
 	}
 }
 
 int Application::ExecApp()
 {
 	cout << "Object tree";
-	this->DisplayHierarchy();
 
-	cout << "\nThe tree of objects and their readiness";
-	this->DisplayHierarchyWithReadiness();
+	this->DisplayHierarchy();
 
 
 	return 0;

@@ -67,6 +67,87 @@ Base* Base::FindOnBranch( string name )
 	return nullptr;
 }
 
+Base* Base::FindRoot()
+{
+	Base* pRoot = this;
+
+	while ( pRoot->_pParentObject != nullptr )
+		pRoot = pRoot->_pParentObject;
+
+	return pRoot;
+}
+
+Base* Base::FindObjectByPath( string path )
+{
+	Base* pCurrent = this;
+	string name;
+	size_t pos = 0;
+
+
+	if ( path == "/" )
+		return this->FindRoot();
+
+	if ( path == "." )
+		return this;
+
+	if ( ( name = path.substr( 2 ) ) == "//" )
+		return this->FindOnTree( name );
+
+	if ( ( name = path.substr( 1 ) ) == "." )
+		return this->FindOnBranch( name );
+
+
+	if ( path[0] == '/' )
+	{
+		pCurrent = this->FindRoot();
+		path = path.substr( 1 );
+	}
+
+	while ( ( pos = path.find( '/' ) ) != string::npos )
+	{
+		name = path.substr( 0, pos );
+		pCurrent = pCurrent->GetChildByName( name );
+
+		if ( !pCurrent ) 
+			return nullptr;
+
+		path.erase( 0, pos + 1 );
+	}
+
+
+	return pCurrent->GetChildByName( path );
+}
+
+bool Base::SetNewParent( Base* newParent )
+{
+	if ( !newParent || this == newParent || this->_pParentObject == nullptr || newParent->FindOnBranch( this->_objectName ) )
+		return false;
+
+
+	auto siblings = this->_pParentObject->_childObjects;
+	siblings.erase( remove( siblings.begin(), siblings.end(), this ), siblings.end() );
+
+	newParent->_childObjects.push_back( this );
+	this->_pParentObject = newParent;
+
+
+	return true;
+}
+
+void Base::DeleteChildByName( string name )
+{
+	auto it = find_if( _childObjects.begin(), _childObjects.end(), [&]( Base* child )
+	{
+		return child->GetObjectName() == name;
+	} );
+
+	if ( it != _childObjects.end() )
+	{
+		delete *it;
+		_childObjects.erase( it );
+	}
+}
+
 void Base::DisplayHierarchy( int level )
 {
 	cout << endl << string( level * 4, ' ' ) << this->_objectName;

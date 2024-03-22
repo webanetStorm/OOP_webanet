@@ -38,6 +38,14 @@ public:
 
     Base* FindOnBranch( string name );
 
+    Base* FindRoot();
+
+    Base* FindObjectByPath( string path );
+
+    bool SetNewParent( Base* pNewParent );
+
+    void DeleteChildByName( string name );
+
     void DisplayHierarchy( int level = 0 );
 
     void DisplayHierarchyWithReadiness( int level = 0 );

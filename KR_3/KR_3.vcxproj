@@ -127,23 +127,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\KR_2\Application.cpp" />
-    <ClCompile Include="..\KR_2\Base.cpp" />
-    <ClCompile Include="..\KR_2\Class2.cpp" />
-    <ClCompile Include="..\KR_2\Class3.cpp" />
-    <ClCompile Include="..\KR_2\Class4.cpp" />
-    <ClCompile Include="..\KR_2\Class5.cpp" />
-    <ClCompile Include="..\KR_2\Class6.cpp" />
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Base.cpp" />
+    <ClCompile Include="Class2.cpp" />
+    <ClCompile Include="Class3.cpp" />
+    <ClCompile Include="Class4.cpp" />
+    <ClCompile Include="Class5.cpp" />
+    <ClCompile Include="Class6.cpp" />
     <ClCompile Include="KR_3.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\KR_2\Application.h" />
-    <ClInclude Include="..\KR_2\Base.h" />
-    <ClInclude Include="..\KR_2\Class2.h" />
-    <ClInclude Include="..\KR_2\Class3.h" />
-    <ClInclude Include="..\KR_2\Class4.h" />
-    <ClInclude Include="..\KR_2\Class5.h" />
-    <ClInclude Include="..\KR_2\Class6.h" />
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Base.h" />
+    <ClInclude Include="Class2.h" />
+    <ClInclude Include="Class3.h" />
+    <ClInclude Include="Class4.h" />
+    <ClInclude Include="Class5.h" />
+    <ClInclude Include="Class6.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

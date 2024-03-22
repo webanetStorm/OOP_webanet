@@ -18,48 +18,48 @@
     <ClCompile Include="KR_3.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Class6.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Application.cpp">
+    <ClCompile Include="Base.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Base.cpp">
+    <ClCompile Include="Class2.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Class2.cpp">
+    <ClCompile Include="Class3.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Class3.cpp">
+    <ClCompile Include="Class4.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Class4.cpp">
+    <ClCompile Include="Class5.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="..\KR_2\Class5.cpp">
+    <ClCompile Include="Class6.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\KR_2\Class6.h">
+    <ClInclude Include="Application.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\KR_2\Application.h">
+    <ClInclude Include="Base.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\KR_2\Base.h">
+    <ClInclude Include="Class2.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\KR_2\Class2.h">
+    <ClInclude Include="Class3.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\KR_2\Class3.h">
+    <ClInclude Include="Class4.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\KR_2\Class4.h">
+    <ClInclude Include="Class5.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="..\KR_2\Class5.h">
+    <ClInclude Include="Class6.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
