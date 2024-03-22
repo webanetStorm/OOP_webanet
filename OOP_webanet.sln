@@ -41,6 +41,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_1_1 Оператор пр
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_1_3 Передач объектов функциям", "3_1_3 Передач объектов функциям\3_1_3 Передач объектов функциям.vcxproj", "{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KR_3", "KR_3\KR_3.vcxproj", "{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -201,6 +203,14 @@ Global
 		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x64.Build.0 = Release|x64
 		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x86.ActiveCfg = Release|Win32
 		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x86.Build.0 = Release|Win32
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Debug|x64.ActiveCfg = Debug|x64
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Debug|x64.Build.0 = Debug|x64
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Debug|x86.ActiveCfg = Debug|Win32
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Debug|x86.Build.0 = Debug|Win32
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Release|x64.ActiveCfg = Release|x64
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Release|x64.Build.0 = Release|x64
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Release|x86.ActiveCfg = Release|Win32
+		{1C4DA85B-9AF2-4630-99A7-35AA9FFD45A9}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
