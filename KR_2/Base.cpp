@@ -51,20 +51,20 @@ Base* Base::Find( string name )
 		return this;
 
 	for ( auto pChild : this->_childObjects )
-		if ( Base* found = pChild->Find( name ) )
-			return found;
+		if ( Base* pFound = pChild->Find( name ) )
+			return pFound;
 
 	return nullptr;
 }
 
 Base* Base::FindOnTree( string name )
 {
-	Base* current = this;
+	Base* pCurrent = this;
 
-	while ( current->_pParentObject != nullptr )
-		current = current->_pParentObject;
+	while ( pCurrent->_pParentObject != nullptr )
+		pCurrent = pCurrent->_pParentObject;
 
-	return current->Find( name );
+	return pCurrent->Find( name );
 }
 
 Base* Base::FindOnBranch( string name )
@@ -108,12 +108,12 @@ void Base::SetReadiness( int state )
 {
 	if ( state != 0 )
 	{
-		Base* current = this->_pParentObject;
+		Base* pCurrent = this->_pParentObject;
 
-		while ( current != nullptr && current->_readiness != 0 )
-			current = current->_pParentObject;
+		while ( pCurrent != nullptr && pCurrent->_readiness != 0 )
+			pCurrent = pCurrent->_pParentObject;
 
-		if ( current == nullptr )
+		if ( pCurrent == nullptr )
 			this->_readiness = state;
 	}
 	else
