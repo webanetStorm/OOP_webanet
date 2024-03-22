@@ -129,7 +129,6 @@
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="Base.cpp" />
-    <ClCompile Include="Class1.cpp" />
     <ClCompile Include="Class2.cpp" />
     <ClCompile Include="Class3.cpp" />
     <ClCompile Include="Class4.cpp" />
@@ -140,7 +139,6 @@
   <ItemGroup>
     <ClInclude Include="Application.h" />
     <ClInclude Include="Base.h" />
-    <ClInclude Include="Class1.h" />
     <ClInclude Include="Class2.h" />
     <ClInclude Include="Class3.h" />
     <ClInclude Include="Class4.h" />

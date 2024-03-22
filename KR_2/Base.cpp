@@ -45,18 +45,6 @@ Base* Base::GetChildByName( string name )
 	return nullptr;
 }
 
-Base* Base::Find( string name )
-{
-	if ( this->_objectName == name ) 
-		return this;
-
-	for ( auto pChild : this->_childObjects )
-		if ( Base* pFound = pChild->Find( name ) )
-			return pFound;
-
-	return nullptr;
-}
-
 Base* Base::FindOnTree( string name )
 {
 	Base* pCurrent = this;
@@ -64,28 +52,19 @@ Base* Base::FindOnTree( string name )
 	while ( pCurrent->_pParentObject != nullptr )
 		pCurrent = pCurrent->_pParentObject;
 
-	return pCurrent->Find( name );
+	return pCurrent->FindOnBranch( name );
 }
 
 Base* Base::FindOnBranch( string name )
 {
-	if ( this->CountOnBranch( name ) != 1 )
-		return nullptr;
-
-	return Find( name );
-}
-
-int Base::CountOnBranch( string name )
-{
-	int result = 0;
-
 	if ( this->_objectName == name )
-		result++;
+		return this;
 
 	for ( auto pChild : this->_childObjects )
-		result += pChild->CountOnBranch( name );
+		if ( Base* pFound = pChild->FindOnBranch( name ) )
+			return pFound;
 
-	return result;
+	return nullptr;
 }
 
 void Base::DisplayHierarchy( int level )

@@ -20,11 +20,6 @@ private:
     vector<Base*> _childObjects;
 
 
-    Base* Find( string name );
-
-    int CountOnBranch( string name );
-
-
 public:
 
     Base( Base* pParentObject, string objectName = "Base_Object" );
