@@ -39,6 +39,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "2_2_2", "2_2_2\2_2_2.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_1_1 Оператор присвоения объектов", "3_1_1 Оператор присвоения объектов\3_1_1 Оператор присвоения объектов.vcxproj", "{32D5F12C-6725-4C7F-BB0D-E9C7DB6905B3}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "3_1_3 Передач объектов функциям", "3_1_3 Передач объектов функциям\3_1_3 Передач объектов функциям.vcxproj", "{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -191,6 +193,14 @@ Global
 		{32D5F12C-6725-4C7F-BB0D-E9C7DB6905B3}.Release|x64.Build.0 = Release|x64
 		{32D5F12C-6725-4C7F-BB0D-E9C7DB6905B3}.Release|x86.ActiveCfg = Release|Win32
 		{32D5F12C-6725-4C7F-BB0D-E9C7DB6905B3}.Release|x86.Build.0 = Release|Win32
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Debug|x64.ActiveCfg = Debug|x64
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Debug|x64.Build.0 = Debug|x64
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Debug|x86.ActiveCfg = Debug|Win32
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Debug|x86.Build.0 = Debug|Win32
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x64.ActiveCfg = Release|x64
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x64.Build.0 = Release|x64
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x86.ActiveCfg = Release|Win32
+		{0EB7D440-7DC4-4EC7-AB1A-8F31FF52AF92}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
