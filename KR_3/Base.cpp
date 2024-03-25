@@ -80,8 +80,6 @@ Base* Base::FindRoot()
 Base* Base::FindObjectByPath( string path )
 {
 	Base* pCurrent = this;
-	string name;
-	size_t pos = 0;
 
 
 	if ( path == "/" )
@@ -90,11 +88,11 @@ Base* Base::FindObjectByPath( string path )
 	if ( path == "." )
 		return this;
 
-	if ( ( name = path.substr( 2 ) ) == "//" )
-		return this->FindOnTree( name );
+	if ( path.substr( 0, 2 ) == "//" )
+		return this->FindOnTree( path.substr( 2 ) );
 
-	if ( ( name = path.substr( 1 ) ) == "." )
-		return this->FindOnBranch( name );
+	if ( path.substr( 0, 1 ) == "." )
+		return this->FindOnBranch( path.substr( 1 ) );
 
 
 	if ( path[0] == '/' )
@@ -103,10 +101,12 @@ Base* Base::FindObjectByPath( string path )
 		path = path.substr( 1 );
 	}
 
+
+	size_t pos = 0;
+
 	while ( ( pos = path.find( '/' ) ) != string::npos )
 	{
-		name = path.substr( 0, pos );
-		pCurrent = pCurrent->GetChildByName( name );
+		pCurrent = pCurrent->GetChildByName( path.substr( 0, pos ) );
 
 		if ( !pCurrent ) 
 			return nullptr;
@@ -136,15 +136,15 @@ bool Base::SetNewParent( Base* newParent )
 
 void Base::DeleteChildByName( string name )
 {
-	auto it = find_if( _childObjects.begin(), _childObjects.end(), [&]( Base* child )
+	auto it = find_if( this->_childObjects.begin(), this->_childObjects.end(), [&]( Base* child )
 	{
 		return child->GetObjectName() == name;
 	} );
 
-	if ( it != _childObjects.end() )
+	if ( it != this->_childObjects.end() )
 	{
 		delete *it;
-		_childObjects.erase( it );
+		this->_childObjects.erase( it );
 	}
 }
 
