@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include "Base.h"
 
 
@@ -57,14 +58,31 @@ Base* Base::FindOnTree( string name )
 
 Base* Base::FindOnBranch( string name )
 {
-	if ( this->_objectName == name )
-		return this;
+	queue<Base*> queue;
+	Base* pFound = nullptr;
 
-	for ( auto pChild : this->_childObjects )
-		if ( Base* pFound = pChild->FindOnBranch( name ) )
-			return pFound;
+	queue.push( this );
 
-	return nullptr;
+
+	while ( !queue.empty() )
+	{
+		Base* pCurrent = queue.front();
+		queue.pop();
+
+		if ( pCurrent->GetObjectName() == name )
+		{
+			if ( pFound == nullptr )
+				pFound = pCurrent;
+			else
+				return nullptr;
+		}
+
+		for ( Base* pChild : pCurrent->_childObjects )
+			queue.push( pChild );
+	}
+
+
+	return pFound;
 }
 
 void Base::DisplayHierarchy( int level )
