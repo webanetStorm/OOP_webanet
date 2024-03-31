@@ -66,19 +66,18 @@ Base* Base::FindOnBranch( string name )
 
 	while ( !queue.empty() )
 	{
-		Base* pCurrent = queue.front();
-		queue.pop();
-
-		if ( pCurrent->GetObjectName() == name )
+		if ( queue.front()->GetObjectName() == name )
 		{
 			if ( pFound == nullptr )
-				pFound = pCurrent;
+				pFound = queue.front();
 			else
 				return nullptr;
 		}
 
-		for ( Base* pChild : pCurrent->_childObjects )
+		for ( auto pChild : queue.front()->_childObjects )
 			queue.push( pChild );
+
+		queue.pop();
 	}
 
 
