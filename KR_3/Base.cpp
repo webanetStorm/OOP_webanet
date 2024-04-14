@@ -135,38 +135,38 @@ Base* Base::FindObjectByPath( string path )
 	return pCurrent->GetChildByName( path );
 }
 
-bool Base::SetNewParent( Base* newParent, string path )
+bool Base::SetNewParent( Base* pNewParent, string path )
 {
-	if ( !newParent )
+	if ( !pNewParent )
 	{ // Проверяем, существует ли newParent
 		cout << path << "     Head object is not found" << endl;
 
 		return false;
 	}
 
-	if ( this->_pParentObject == nullptr || this == newParent )
+	if ( !this->_pParentObject || this == pNewParent )
 	{ // Проверяем, не является ли this корневым объектом или newParent текущим объектом
 		cout << path << "     Redefining the head object failed" << endl;
 
 		return false;
 	}
 
-	Base* current = newParent;
-	while ( current != nullptr )
+	Base* pCurrent = pNewParent;
+	while ( pCurrent )
 	{ // Проверяем, не принадлежит ли newParent к поддереву this
-		if ( current == this )
+		if ( pCurrent == this )
 		{
 			cout << path << "     Redefining the head object failed" << endl;
 
 			return false;
 		}
 
-		current = current->_pParentObject;
+		pCurrent = pCurrent->_pParentObject;
 	}
 
-	for ( auto child : newParent->_childObjects )
+	for ( auto pChild : pNewParent->_childObjects )
 	{ // Проверяем, нет ли у newParent подчиненного с таким же именем
-		if ( child->GetObjectName() == this->_objectName )
+		if ( pChild->GetObjectName() == this->_objectName )
 		{
 			cout << path << "     Dubbing the names of subordinate objects" << endl;
 
@@ -181,20 +181,20 @@ bool Base::SetNewParent( Base* newParent, string path )
 		siblings.erase( remove( siblings.begin(), siblings.end(), this ), siblings.end() );
 	}
 
-	newParent->_childObjects.push_back( this );
-	this->_pParentObject = newParent;
+	pNewParent->_childObjects.push_back( this );
+	this->_pParentObject = pNewParent;
 
 
-	cout << "New head object: " << newParent->GetObjectName() << endl;
+	cout << "New head object: " << pNewParent->GetObjectName() << endl;
 
 	return true;
 }
 
 void Base::DeleteChildByName( string name )
 {
-	auto it = find_if( this->_childObjects.begin(), this->_childObjects.end(), [&]( Base* child )
+	auto it = find_if( this->_childObjects.begin(), this->_childObjects.end(), [&]( Base* pChild )
 	{
-		return child->GetObjectName() == name;
+		return pChild->GetObjectName() == name;
 	} );
 
 	if ( it != this->_childObjects.end() )
