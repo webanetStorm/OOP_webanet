@@ -176,10 +176,20 @@ bool Base::SetNewParent( Base* pNewParent, string path )
 
 
 	if ( this->_pParentObject )
-	{ // Выполняем переопределение головного объекта
+	{
 		auto& siblings = this->_pParentObject->_childObjects;
-		siblings.erase( remove( siblings.begin(), siblings.end(), this ), siblings.end() );
+
+		for ( size_t i = 0; i < siblings.size(); i++ )
+		{
+			if ( siblings[i] == this )
+			{
+				siblings.erase( siblings.begin() + i );
+				break;
+			}
+		}
 	}
+
+
 
 	pNewParent->_childObjects.push_back( this );
 	this->_pParentObject = pNewParent;
@@ -192,15 +202,16 @@ bool Base::SetNewParent( Base* pNewParent, string path )
 
 void Base::DeleteChildByName( string name )
 {
-	auto it = find_if( this->_childObjects.begin(), this->_childObjects.end(), [&]( Base* pChild )
+	for ( auto it = this->_childObjects.begin(); it != this->_childObjects.end(); it++ )
 	{
-		return pChild->GetObjectName() == name;
-	} );
+		if ( ( *it )->GetObjectName() == name )
+		{
+			delete *it;
 
-	if ( it != this->_childObjects.end() )
-	{
-		delete *it;
-		this->_childObjects.erase( it );
+			this->_childObjects.erase( it );
+
+			return;
+		}
 	}
 }
 
