@@ -42,7 +42,7 @@ public:
 
     Base* FindObjectByPath( string path );
 
-    bool SetNewParent( Base* pNewParent );
+    bool SetNewParent( Base* pNewParent, string path );
 
     void DeleteChildByName( string name );
 

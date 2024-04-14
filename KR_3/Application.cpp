@@ -11,11 +11,14 @@ void Application::BuildTreeObjects()
 	int classNumber;
 
 
+
 	cin >> parentPath;
 	this->SetObjectName( parentPath );
 
+
 	while ( true )
 	{
+
 		cin >> parentPath;
 
 		if ( parentPath == "endtree" )
@@ -47,20 +50,27 @@ void Application::BuildTreeObjects()
 					break;
 			}
 		}
+
 	}
+
 	
 
 	cout << "Object tree";
 	this->DisplayHierarchy();
+	cout << endl;
 
-	Base *pCurrentObject = this, *pObj;
+	
+	Base *pCurrentObject = this, *pObj = this;
 	string command, parameter;
 
-	while ( cin >> command >> parameter )
+	while ( cin >> command )
 	{
+
 		if ( command == "SET" )
 		{
-			if ( pObj = this->FindObjectByPath( parameter ) )
+			cin >> parameter;
+
+			if ( pObj = pCurrentObject->FindObjectByPath( parameter ) )
 			{
 				pCurrentObject = pObj;
 				cout << "Object is set: " << pCurrentObject->GetObjectName() << endl;
@@ -70,33 +80,38 @@ void Application::BuildTreeObjects()
 				cout << "The object was not found at the specified coordinate: " << parameter << endl;
 			}
 		}
-		//else if ( command == "FIND" )
-		//{
-		//	( pObj = pCurrentObject->FindObjectByPath( parameter ) )
-		//		? cout << parameter << "     Object name: " << pObj->GetObjectName() << endl
-		//		: cout << parameter << "     Object is not found" << endl;
-		//}
-		//else if ( command == "MOVE" )
-		//{
-		//	pCurrentObject->SetNewParent( pObj = pCurrentObject->FindObjectByPath( parameter ) )
-		//		? cout << "New head object: " << pObj->GetObjectName() << endl
-		//		: cout << "Redefining the head object failed" << endl;
-		//}
-		//else if ( command == "DELETE" )
-		//{
-		//	pCurrentObject->DeleteChildByName( parameter );
-		//	cout << "The object " << parameter << " has been deleted" << endl;
-		//}
+		else if ( command == "FIND" )
+		{
+			cin >> parameter;
+
+			( pObj = pCurrentObject->FindObjectByPath( parameter ) )
+				? cout << parameter << "     Object name: " << pObj->GetObjectName() << endl
+				: cout << parameter << "     Object is not found" << endl;
+		}
+		else if ( command == "MOVE" )
+		{
+			cin >> parameter;
+
+			pCurrentObject->SetNewParent( pCurrentObject->FindObjectByPath( parameter ), parameter );
+		}
+		else if ( command == "DELETE" )
+		{
+			cin >> parameter;
+
+			pCurrentObject->DeleteChildByName( parameter );
+			cout << "The object " << parameter << " has been deleted" << endl;
+		}
 		else if ( command == "END" )
 		{
 			break;
 		}
+
 	}
 }
 
 int Application::ExecApp()
 {
-	cout << "Object tree";
+	cout << "Current object hierarchy tree";
 
 	this->DisplayHierarchy();
 

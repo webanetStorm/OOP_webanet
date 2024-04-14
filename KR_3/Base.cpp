@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include "Base.h"
 
 
@@ -49,7 +50,7 @@ Base* Base::FindOnTree( string name )
 {
 	Base* pCurrent = this;
 
-	while ( pCurrent->_pParentObject != nullptr )
+	while ( pCurrent->_pParentObject )
 		pCurrent = pCurrent->_pParentObject;
 
 	return pCurrent->FindOnBranch( name );
@@ -57,21 +58,37 @@ Base* Base::FindOnTree( string name )
 
 Base* Base::FindOnBranch( string name )
 {
-	if ( this->_objectName == name )
-		return this;
+	queue<Base*> queue;
+	Base* pFound = nullptr;
 
-	for ( auto pChild : this->_childObjects )
-		if ( Base* pFound = pChild->FindOnBranch( name ) )
-			return pFound;
+	queue.push( this );
 
-	return nullptr;
+
+	while ( !queue.empty() )
+	{
+		if ( queue.front()->GetObjectName() == name )
+		{
+			if ( pFound == nullptr )
+				pFound = queue.front();
+			else
+				return nullptr;
+		}
+
+		for ( auto pChild : queue.front()->_childObjects )
+			queue.push( pChild );
+
+		queue.pop();
+	}
+
+
+	return pFound;
 }
 
 Base* Base::FindRoot()
 {
 	Base* pRoot = this;
 
-	while ( pRoot->_pParentObject != nullptr )
+	while ( pRoot->_pParentObject )
 		pRoot = pRoot->_pParentObject;
 
 	return pRoot;
@@ -118,18 +135,57 @@ Base* Base::FindObjectByPath( string path )
 	return pCurrent->GetChildByName( path );
 }
 
-bool Base::SetNewParent( Base* newParent )
+bool Base::SetNewParent( Base* newParent, string path )
 {
-	if ( !newParent || this == newParent || this->_pParentObject == nullptr || newParent->FindOnBranch( this->_objectName ) )
+	if ( !newParent )
+	{ // Проверяем, существует ли newParent
+		cout << path << "     Head object is not found" << endl;
+
 		return false;
+	}
+
+	if ( this->_pParentObject == nullptr || this == newParent )
+	{ // Проверяем, не является ли this корневым объектом или newParent текущим объектом
+		cout << path << "     Redefining the head object failed" << endl;
+
+		return false;
+	}
+
+	Base* current = newParent;
+	while ( current != nullptr )
+	{ // Проверяем, не принадлежит ли newParent к поддереву this
+		if ( current == this )
+		{
+			cout << path << "     Redefining the head object failed" << endl;
+
+			return false;
+		}
+
+		current = current->_pParentObject;
+	}
+
+	for ( auto child : newParent->_childObjects )
+	{ // Проверяем, нет ли у newParent подчиненного с таким же именем
+		if ( child->GetObjectName() == this->_objectName )
+		{
+			cout << path << "     Dubbing the names of subordinate objects" << endl;
+
+			return false;
+		}
+	}
 
 
-	auto siblings = this->_pParentObject->_childObjects;
-	siblings.erase( remove( siblings.begin(), siblings.end(), this ), siblings.end() );
+	if ( this->_pParentObject )
+	{ // Выполняем переопределение головного объекта
+		auto& siblings = this->_pParentObject->_childObjects;
+		siblings.erase( remove( siblings.begin(), siblings.end(), this ), siblings.end() );
+	}
 
 	newParent->_childObjects.push_back( this );
 	this->_pParentObject = newParent;
 
+
+	cout << "New head object: " << newParent->GetObjectName() << endl;
 
 	return true;
 }
