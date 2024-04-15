@@ -175,21 +175,18 @@ bool Base::SetNewParent( Base* pNewParent, string path )
 	}
 
 
-	if ( this->_pParentObject )
-	{
-		auto& siblings = this->_pParentObject->_childObjects;
 
-		for ( size_t i = 0; i < siblings.size(); i++ )
+	if ( this->_pParentObject )
+	{ // Выполняем переопределение головного объекта
+		for ( size_t i = 0; i < this->_pParentObject->_childObjects.size(); i++ )
 		{
-			if ( siblings[i] == this )
+			if ( this->_pParentObject->_childObjects[i] == this )
 			{
-				siblings.erase( siblings.begin() + i );
+				this->_pParentObject->_childObjects.erase( this->_pParentObject->_childObjects.begin() + i );
 				break;
 			}
 		}
 	}
-
-
 
 	pNewParent->_childObjects.push_back( this );
 	this->_pParentObject = pNewParent;
