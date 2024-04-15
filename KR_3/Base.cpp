@@ -1,9 +1,10 @@
 #include <iostream>
+#include <algorithm>
 #include <queue>
 #include "Base.h"
 
 
-Base::Base( Base* pParentObject, string objectName ) : _pParentObject( pParentObject ), _objectName( objectName ), _readiness( 0 )
+Base::Base( Base* pParentObject, string objectName ) : _pParentObject( pParentObject ), _objectName( objectName )
 {
 	if ( pParentObject )
 		pParentObject->_childObjects.push_back( this );
@@ -125,7 +126,7 @@ Base* Base::FindObjectByPath( string path )
 	{
 		pCurrent = pCurrent->GetChildByName( path.substr( 0, pos ) );
 
-		if ( !pCurrent ) 
+		if ( !pCurrent )
 			return nullptr;
 
 		path.erase( 0, pos + 1 );
@@ -146,12 +147,10 @@ bool Base::SetNewParent( Base* pNewParent )
 			pCurrent = pCurrent->_pParentObject;
 
 			if ( pCurrent == this )
-			{
 				return false;
-			}
 		}
 
-		if ( pNewParent->GetChildByName( this->_objectName ) == nullptr && this->_pParentObject )
+		if ( !pNewParent->GetChildByName( this->_objectName ) && this->_pParentObject )
 		{
 			this->_pParentObject->_childObjects.erase( find( this->_pParentObject->_childObjects.begin(), this->_pParentObject->_childObjects.end(), this ) );
 			pNewParent->_childObjects.push_back( this );
@@ -164,16 +163,16 @@ bool Base::SetNewParent( Base* pNewParent )
 	return false;
 }
 
- void Base::DeleteChildByName( string name )
+void Base::DeleteChildByName( string name )
 {
-	 Base* pChild = this->GetChildByName( name );
+	Base* pChild = this->GetChildByName( name );
 
-	 if ( pChild )
-	 {
-		 this->_childObjects.erase( find( this->_childObjects.begin(), this->_childObjects.end(), pChild ) );
+	if ( pChild )
+	{
+		this->_childObjects.erase( find( this->_childObjects.begin(), this->_childObjects.end(), pChild ) );
 
-		 delete pChild;
-	 }
+		delete pChild;
+	}
 }
 
 void Base::DisplayHierarchy( int level )
@@ -196,12 +195,12 @@ void Base::SetReadiness( int state )
 {
 	if ( state != 0 )
 	{
-		Base* pCurrent = this->_pParentObject;
+		Base* current = this->_pParentObject;
 
-		while ( pCurrent != nullptr && pCurrent->_readiness != 0 )
-			pCurrent = pCurrent->_pParentObject;
+		while ( current != nullptr && current->_readiness != 0 )
+			current = current->_pParentObject;
 
-		if ( pCurrent == nullptr )
+		if ( current == nullptr )
 			this->_readiness = state;
 	}
 	else

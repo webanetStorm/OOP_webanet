@@ -81,7 +81,9 @@ void Application::BuildTreeObjects()
 				cout << "Object is set: " << pCurrentObject->GetObjectName() << endl;
 			}
 			else
+			{
 				cout << "The object was not found at the specified coordinate: " << parameter << endl;
+			}
 		}
 		else if ( command == "FIND" )
 		{
@@ -103,11 +105,13 @@ void Application::BuildTreeObjects()
 					cout << parameter << "     Redefining the head object failed" << endl;
 			}
 			else
+			{
 				cout << parameter << "     Head object is not found" << endl;
+			}
 		}
 		else if ( command == "DELETE" )
 		{
-			pObj = this->FindObjectByPath( parameter );
+			pObj = pCurrentObject->FindObjectByPath( parameter );
 
 			if ( pObj )
 			{
