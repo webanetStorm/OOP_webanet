@@ -66,44 +66,68 @@ void Application::BuildTreeObjects()
 	while ( cin >> command )
 	{
 
+		if ( command == "END" )
+		{
+			break;
+		}
+
+		cin >> parameter;
+
 		if ( command == "SET" )
 		{
-			cin >> parameter;
-
 			if ( pObj = pCurrentObject->FindObjectByPath( parameter ) )
 			{
 				pCurrentObject = pObj;
 				cout << "Object is set: " << pCurrentObject->GetObjectName() << endl;
 			}
 			else
-			{
 				cout << "The object was not found at the specified coordinate: " << parameter << endl;
-			}
 		}
 		else if ( command == "FIND" )
 		{
-			cin >> parameter;
-
 			( pObj = pCurrentObject->FindObjectByPath( parameter ) )
 				? cout << parameter << "     Object name: " << pObj->GetObjectName() << endl
 				: cout << parameter << "     Object is not found" << endl;
 		}
 		else if ( command == "MOVE" )
 		{
-			cin >> parameter;
+			pObj = pCurrentObject->FindObjectByPath( parameter );
 
-			pCurrentObject->SetNewParent( pCurrentObject->FindObjectByPath( parameter ), parameter );
+			if ( pObj )
+			{
+				if ( pCurrentObject->SetNewParent( pObj ) )
+					cout << "New head object: " << pObj->GetObjectName() << endl;
+				else if ( pObj->GetChildByName( pCurrentObject->GetObjectName() ) )
+					cout << parameter << "     Dubbing the names of subordinate objects" << endl;
+				else
+					cout << parameter << "     Redefining the head object failed" << endl;
+			}
+			else
+				cout << parameter << "     Head object is not found" << endl;
 		}
 		else if ( command == "DELETE" )
 		{
-			cin >> parameter;
+			pObj = this->FindObjectByPath( parameter );
 
-			pCurrentObject->DeleteChildByName( parameter );
-			cout << "The object " << parameter << " has been deleted" << endl;
-		}
-		else if ( command == "END" )
-		{
-			break;
+			if ( pObj )
+			{
+				pParentObject = pObj->GetParentObject();
+
+				if ( pParentObject )
+				{
+					string fullPath = pObj->GetObjectName();
+					Base* pCurrent = pObj->GetParentObject();
+
+					while ( pCurrent && pCurrent != this )
+					{
+						fullPath = pCurrent->GetObjectName() + '/' + fullPath;
+						pCurrent = pCurrent->GetParentObject();
+					}
+
+					pParentObject->DeleteChildByName( pObj->GetObjectName() );
+					cout << "The object /" << fullPath << " has been deleted" << endl;
+				}
+			}
 		}
 
 	}

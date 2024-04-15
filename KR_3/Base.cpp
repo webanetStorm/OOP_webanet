@@ -135,81 +135,45 @@ Base* Base::FindObjectByPath( string path )
 	return pCurrent->GetChildByName( path );
 }
 
-bool Base::SetNewParent( Base* pNewParent, string path )
+bool Base::SetNewParent( Base* pNewParent )
 {
-	if ( !pNewParent )
-	{ // Проверяем, существует ли newParent
-		cout << path << "     Head object is not found" << endl;
+	if ( pNewParent )
+	{
+		Base* pCurrent = pNewParent;
 
-		return false;
-	}
-
-	if ( !this->_pParentObject || this == pNewParent )
-	{ // Проверяем, не является ли this корневым объектом или newParent текущим объектом
-		cout << path << "     Redefining the head object failed" << endl;
-
-		return false;
-	}
-
-	Base* pCurrent = pNewParent;
-	while ( pCurrent )
-	{ // Проверяем, не принадлежит ли newParent к поддереву this
-		if ( pCurrent == this )
+		while ( pCurrent )
 		{
-			cout << path << "     Redefining the head object failed" << endl;
+			pCurrent = pCurrent->_pParentObject;
 
-			return false;
-		}
-
-		pCurrent = pCurrent->_pParentObject;
-	}
-
-	for ( auto pChild : pNewParent->_childObjects )
-	{ // Проверяем, нет ли у newParent подчиненного с таким же именем
-		if ( pChild->GetObjectName() == this->_objectName )
-		{
-			cout << path << "     Dubbing the names of subordinate objects" << endl;
-
-			return false;
-		}
-	}
-
-
-
-	if ( this->_pParentObject )
-	{ // Выполняем переопределение головного объекта
-		for ( size_t i = 0; i < this->_pParentObject->_childObjects.size(); i++ )
-		{
-			if ( this->_pParentObject->_childObjects[i] == this )
+			if ( pCurrent == this )
 			{
-				this->_pParentObject->_childObjects.erase( this->_pParentObject->_childObjects.begin() + i );
-				break;
+				return false;
 			}
 		}
-	}
 
-	pNewParent->_childObjects.push_back( this );
-	this->_pParentObject = pNewParent;
-
-
-	cout << "New head object: " << pNewParent->GetObjectName() << endl;
-
-	return true;
-}
-
-void Base::DeleteChildByName( string name )
-{
-	for ( auto it = this->_childObjects.begin(); it != this->_childObjects.end(); it++ )
-	{
-		if ( ( *it )->GetObjectName() == name )
+		if ( pNewParent->GetChildByName( this->_objectName ) == nullptr && this->_pParentObject )
 		{
-			delete *it;
+			this->_pParentObject->_childObjects.erase( find( this->_pParentObject->_childObjects.begin(), this->_pParentObject->_childObjects.end(), this ) );
+			pNewParent->_childObjects.push_back( this );
+			this->_pParentObject = pNewParent;
 
-			this->_childObjects.erase( it );
-
-			return;
+			return true;
 		}
 	}
+
+	return false;
+}
+
+ void Base::DeleteChildByName( string name )
+{
+	 Base* pChild = this->GetChildByName( name );
+
+	 if ( pChild )
+	 {
+		 this->_childObjects.erase( find( this->_childObjects.begin(), this->_childObjects.end(), pChild ) );
+
+		 delete pChild;
+	 }
 }
 
 void Base::DisplayHierarchy( int level )
