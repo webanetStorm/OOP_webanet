@@ -63,19 +63,17 @@ void Application::BuildTreeObjects()
 	Base *pCurrentObject = this, *pObj = this;
 	string command, parameter;
 
-	while ( cin >> command )
+	while ( cin >> command, command != "END" )
 	{
-
-		if ( command == "END" )
-		{
-			break;
-		}
 
 		cin >> parameter;
 
+		pObj = pCurrentObject->FindObjectByPath( parameter );
+
+
 		if ( command == "SET" )
 		{
-			if ( pObj = pCurrentObject->FindObjectByPath( parameter ) )
+			if ( pObj )
 			{
 				pCurrentObject = pObj;
 				cout << "Object is set: " << pCurrentObject->GetObjectName() << endl;
@@ -87,14 +85,12 @@ void Application::BuildTreeObjects()
 		}
 		else if ( command == "FIND" )
 		{
-			( pObj = pCurrentObject->FindObjectByPath( parameter ) )
+			pObj
 				? cout << parameter << "     Object name: " << pObj->GetObjectName() << endl
 				: cout << parameter << "     Object is not found" << endl;
 		}
 		else if ( command == "MOVE" )
 		{
-			pObj = pCurrentObject->FindObjectByPath( parameter );
-
 			if ( pObj )
 			{
 				if ( pCurrentObject->SetNewParent( pObj ) )
@@ -111,8 +107,6 @@ void Application::BuildTreeObjects()
 		}
 		else if ( command == "DELETE" )
 		{
-			pObj = pCurrentObject->FindObjectByPath( parameter );
-
 			if ( pObj )
 			{
 				pParentObject = pObj->GetParentObject();
