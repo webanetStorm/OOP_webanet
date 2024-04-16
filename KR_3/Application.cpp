@@ -116,7 +116,7 @@ void Application::BuildTreeObjects()
 					string fullPath = pObj->GetObjectName();
 					Base* pCurrent = pObj->GetParentObject();
 
-					while ( pCurrent && pCurrent != this )
+					while ( pCurrent != this )
 					{
 						fullPath = pCurrent->GetObjectName() + '/' + fullPath;
 						pCurrent = pCurrent->GetParentObject();
