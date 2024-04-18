@@ -67,6 +67,7 @@ void Application::BuildTreeObjects()
 	{
 
 		cin >> parameter;
+		pObj = pCurrentObject->FindObjectByPath( parameter );
 
 		pObj = pCurrentObject->FindObjectByPath( parameter );
 
