@@ -111,7 +111,7 @@ void Application::BuildTreeObjects()
 			this->DisplayHierarchy();
 			cout << endl << "The head object " << path << " is not found";
 
-			return;
+			exit( 1 );
 		}
 
 
