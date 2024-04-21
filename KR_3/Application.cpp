@@ -1,73 +1,27 @@
-#include "Application.h"
 #include <iostream>
+#include <stack>
+#include "Application.h"
+
+using namespace std;
 
 
-Application::Application( Base* pParentObject ) : Base( pParentObject ) {}
-
-void Application::BuildTreeObjects()
+Application::Application( Base* pParentObject ) : Base( pParentObject )
 {
-	Base *pParentObject = this;
-	string parentPath, childName;
-	int classNumber;
+}
 
-
-
-	cin >> parentPath;
-	this->SetObjectName( parentPath );
-
-
-	while ( true )
-	{
-
-		cin >> parentPath;
-
-		if ( parentPath == "endtree" )
-			break;
-
-
-		cin >> childName >> classNumber;
-
-		pParentObject = this->FindObjectByPath( parentPath );
-
-		if ( pParentObject && pParentObject->GetChildByName( childName ) == nullptr )
-		{
-			switch ( classNumber )
-			{
-				case 2:
-					new Class2( pParentObject, childName );
-					break;
-				case 3:
-					new Class3( pParentObject, childName );
-					break;
-				case 4:
-					new Class4( pParentObject, childName );
-					break;
-				case 5:
-					new Class5( pParentObject, childName );
-					break;
-				case 6:
-					new Class6( pParentObject, childName );
-					break;
-			}
-		}
-
-	}
-
-	
-
-	cout << "Object tree";
-	this->DisplayHierarchy();
-	cout << endl;
-
-	
-	Base *pCurrentObject = this, *pObj = this;
+int Application::ExecApp()
+{
 	string command, parameter;
+	Base *pCurrentObject = this, *pObj = nullptr;
+	stack<string> pathStack;
+
+	this->DisplayHierarchy();
+
 
 	while ( cin >> command, command != "END" )
 	{
 
 		cin >> parameter;
-		pObj = pCurrentObject->FindObjectByPath( parameter );
 
 		pObj = pCurrentObject->FindObjectByPath( parameter );
 
@@ -77,66 +31,115 @@ void Application::BuildTreeObjects()
 			if ( pObj )
 			{
 				pCurrentObject = pObj;
-				cout << "Object is set: " << pCurrentObject->GetObjectName() << endl;
+				cout << endl << "Object is set: " << pCurrentObject->GetObjectName();
 			}
 			else
-			{
-				cout << "The object was not found at the specified coordinate: " << parameter << endl;
-			}
+				cout << endl << "The object was not found at the specified coordinate: " << parameter;
 		}
 		else if ( command == "FIND" )
 		{
 			pObj
-				? cout << parameter << "     Object name: " << pObj->GetObjectName() << endl
-				: cout << parameter << "     Object is not found" << endl;
+				? cout << endl << parameter << "     Object name: " << pObj->GetObjectName()
+				: cout << endl << parameter << "     Object is not found";
 		}
 		else if ( command == "MOVE" )
 		{
-			if ( pObj )
-			{
-				if ( pCurrentObject->SetNewParent( pObj ) )
-					cout << "New head object: " << pObj->GetObjectName() << endl;
-				else if ( pObj->GetChildByName( pCurrentObject->GetObjectName() ) )
-					cout << parameter << "     Dubbing the names of subordinate objects" << endl;
-				else
-					cout << parameter << "     Redefining the head object failed" << endl;
-			}
+			if ( pCurrentObject->SetNewParent( pObj ) )
+				cout << endl << "New head object: " << pObj->GetObjectName();
+			else if ( !pObj )
+				cout << endl << parameter << "     Head object is not found";
+			else if ( pObj->GetChildByName( pCurrentObject->GetObjectName() ) )
+				cout << endl << parameter << "     Dubbing the names of subordinate objects";
 			else
-			{
-				cout << parameter << "     Head object is not found" << endl;
-			}
+				cout << endl << parameter << "     Redefining the head object failed";
 		}
 		else if ( command == "DELETE" )
 		{
+			pObj = pCurrentObject->GetChildByName( parameter );
+
 			if ( pObj )
 			{
-				pParentObject = pObj->GetParentObject();
-
-				if ( pParentObject )
+				while ( pObj->GetParentObject() )
 				{
-					string fullPath = pObj->GetObjectName();
-					Base* pCurrent = pObj->GetParentObject();
-
-					while ( pCurrent != this )
-					{
-						fullPath = pCurrent->GetObjectName() + '/' + fullPath;
-						pCurrent = pCurrent->GetParentObject();
-					}
-
-					pParentObject->DeleteChildByName( pObj->GetObjectName() );
-					cout << "The object /" << fullPath << " has been deleted" << endl;
+					pathStack.push( pObj->GetObjectName() );
+					pObj = pObj->GetParentObject();
 				}
+
+				pCurrentObject->DeleteChildByName( parameter );
+				cout << endl << "The object ";
+
+				while ( !pathStack.empty() )
+				{
+					cout << '/' << pathStack.top();
+					pathStack.pop();
+				}
+
+				cout << " has been deleted";
+			}
+		}
+	}
+
+
+	cout << endl << "Current object hierarchy tree";
+
+	this->DisplayHierarchy();
+
+
+	return 0;
+}
+
+void Application::BuildTreeObjects()
+{
+	Base *pParentObject, *pLastCreatedObject = this;
+	string path, childName;
+	int classNumber;
+
+	cout << "Object tree";
+	cin >> childName;
+	this->SetObjectName( childName );
+
+
+	while ( cin >> path, path != "endtree" )
+	{
+
+		cin >> childName >> classNumber;
+		pParentObject = pLastCreatedObject->FindObjectByPath( path );
+
+
+		if ( !pParentObject )
+		{
+			this->DisplayHierarchy();
+			cout << endl << "The head object " << path << " is not found";
+
+			return;
+		}
+
+
+		if ( pParentObject->GetChildByName( childName ) )
+		{
+			cout << endl << path << "     Dubbing the names of subordinate objects";
+		}
+		else
+		{
+			switch ( classNumber )
+			{
+				case 2:
+					pLastCreatedObject = new Class2( pParentObject, childName );
+					break;
+				case 3:
+					pLastCreatedObject = new Class3( pParentObject, childName );
+					break;
+				case 4:
+					pLastCreatedObject = new Class4( pParentObject, childName );
+					break;
+				case 5:
+					pLastCreatedObject = new Class5( pParentObject, childName );
+					break;
+				case 6:
+					pLastCreatedObject = new Class6( pParentObject, childName );
+					break;
 			}
 		}
 
 	}
-}
-
-int Application::ExecApp()
-{
-	cout << "Current object hierarchy tree";
-
-	this->DisplayHierarchy();
-
-	return 0;
 }

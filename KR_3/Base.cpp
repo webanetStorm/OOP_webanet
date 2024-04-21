@@ -97,11 +97,16 @@ Base* Base::FindRoot()
 
 Base* Base::FindObjectByPath( string path )
 {
-	Base* pCurrent = this;
+	Base* pCurrent = this, *pRoot = this;
+
+	while ( pRoot->_pParentObject )
+		pRoot = pRoot->_pParentObject;
 
 
-	if ( path == "/" )
-		return this->FindRoot();
+	if ( path == "/" || path[0] == '/' )
+	{
+		return pRoot;
+	}
 
 	if ( path == "." )
 		return this;
@@ -115,7 +120,7 @@ Base* Base::FindObjectByPath( string path )
 
 	if ( path[0] == '/' )
 	{
-		pCurrent = this->FindRoot();
+		pCurrent = pRoot;
 		path = path.substr( 1 );
 	}
 
