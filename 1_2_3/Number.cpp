@@ -1,5 +1,4 @@
 #include "Number.h"
-#include <cmath>
 #include <iostream>
 
 
@@ -15,10 +14,16 @@ long long int Number::GetN()
 
 void Number::CountDigits()
 {
-	long long int tempN = _n * ( ( _n > 0 ) - ( _n < 0 ) );
+	long long int tempN = _n;
 
-	for ( _count = 0; tempN > 0; _count++ )
-		tempN = tempN / 10;
+	if ( _n < 0 )
+		tempN *= -1;
+
+	while ( tempN > 0 )
+	{
+		tempN /= 10;
+		_count++;
+	}
 
 	if ( _n == 0 )
 		_count = 1;
