@@ -24,7 +24,7 @@ int main()
 	Class2 obj2;
 	obj2.SetBC( b, c );
 
-	cout << Max( obj1, obj2 );
+	cout << "max = " << Max( obj1, obj2 );
 
 
 	return 0;
