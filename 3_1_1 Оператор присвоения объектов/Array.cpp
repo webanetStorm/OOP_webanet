@@ -23,7 +23,7 @@ void Array::Print()
 	{
 		cout << this->Arr[i];
 		if ( i < this->Arr[0] - 1 )
-			cout << " ";
+			cout << "  ";
 	}
 
 	cout << endl;
