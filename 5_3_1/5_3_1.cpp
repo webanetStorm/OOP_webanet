@@ -32,7 +32,7 @@ int main()
 			default: continue;
 		}
 
-		std::cout << "Class " << classNum << "    F(" << x << ") = " << chosenPoly->Evaluate( x ) << std::endl;
+		std::cout << "Class " << classNum << "    F( " << x << " ) = " << chosenPoly->Evaluate( x ) << std::endl;
 		delete chosenPoly;
 	}
 
