@@ -21,8 +21,8 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{61cc801b-bbb9-43a7-9f34-6e1d9ef34e30}</ProjectGuid>
-    <RootNamespace>My531</RootNamespace>
+    <ProjectGuid>{d66c506d-780d-4f95-b91e-84456133d9c0}</ProjectGuid>
+    <RootNamespace>My911</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -127,17 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="5_3_1.cpp" />
-    <ClCompile Include="Class1.cpp" />
-    <ClCompile Include="Class2.cpp" />
-    <ClCompile Include="Class3.cpp" />
-    <ClCompile Include="Class4.cpp" />
+    <ClCompile Include="9_1_1.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Class1.h" />
-    <ClInclude Include="Class2.h" />
-    <ClInclude Include="Class3.h" />
-    <ClInclude Include="Class4.h" />
+    <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
