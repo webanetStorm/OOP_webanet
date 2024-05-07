@@ -1,17 +1,12 @@
-#pragma once
+#ifndef __CL_6_H__
+#define __CL_6_H__
+#include "Base.h"
 
-#include  "Base.h"
-
-
-class Class6 : public Base
+class cl_6 : public Base
 {
-
 public:
-
-	Class6( Base* pParentObject, string objectName );
-
-	void Signal( string& message );
-
-	void Handler( string message );
-
+	cl_6( Base* pParent, string _name );
+	void signal_f( string& msg );
+	void handler_f( string msg );
 };
+#endif

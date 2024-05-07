@@ -1,18 +1,17 @@
 #include "Class3.h"
 
-
-Class3::Class3( Base* pParentObject, string objectName ) : Base( pParentObject, objectName )
+cl_3::cl_3( Base* pParent, string _name ) :Base( pParent, _name )
 {
-	this->ClassNumber = 3;
+	this->number = 3;
 }
 
-void Class3::Signal( string& message )
+void cl_3::signal_f( string& msg )
 {
-	cout << endl << "Signal from " << this->GetPath();
-	message += " (class: 3)";
+	cout << endl << "Signal from " << this->get_path();
+	msg += " (class: 3)";
 }
 
-void Class3::Handler( string message )
+void cl_3::handler_f( string msg )
 {
-	cout << endl << "Signal to " << this->GetPath() << " Text: " << message;
+	cout << endl << "Signal to " << get_path() << " Text:  " << msg;
 }

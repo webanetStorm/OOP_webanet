@@ -1,248 +1,381 @@
-#include <algorithm>
-#include <queue>
-#include <stack>
 #include "Base.h"
 
-
-Base::Base( Base* pParentObject, string objectName ) : _pParentObject( pParentObject ), _objectName( objectName )
+Base::Base( Base* pParent, string _name )
 {
-	if ( pParentObject )
-		pParentObject->_childObjects.push_back( this );
+	this->_name = _name;
+	this->pParent = pParent;
+	if ( pParent != nullptr )
+	{
+		pParent->pChilds.push_back( this );
+	}
 }
 
 Base::~Base()
 {
-	for ( auto pChild : this->_childObjects )
-		delete pChild;
+	get_root()->delete_links( this );
+	for ( int i = 0; i < pChilds.size(); i++ )
+	{
+		delete pChilds[i];
+	}
 }
 
-bool Base::SetObjectName( string name )
+bool Base::set_name( string s_new_name )
 {
-	if ( this->_pParentObject )
-		for ( auto pChild : this->_pParentObject->_childObjects )
-			if ( pChild->GetObjectName() == name )
+	if ( get_head() != nullptr )
+	{
+		for ( int i = 0; i < get_head()->pChilds.size(); i++ )
+		{
+			if ( get_head()->pChilds[i]->get_name() == s_new_name )
+			{
 				return false;
-
-	this->_objectName = name;
-
+			}
+		}
+	}
+	_name = s_new_name;
 	return true;
 }
 
-string Base::GetObjectName()
+void Base::print_tree( string delay )
 {
-	return this->_objectName;
+	cout << endl << delay << get_name();
+	for ( auto p_sub : pChilds )
+	{
+		p_sub->print_tree( delay + "    " );
+	}
 }
 
-Base* Base::GetParentObject()
+void Base::print_ready( string delay )
 {
-	return this->_pParentObject;
+	cout << endl << delay;
+	get_ready( get_name() );
+	for ( auto p_sub : pChilds )
+	{
+		p_sub->print_ready( delay + "    " );
+	}
 }
 
-Base* Base::GetChildByName( string name )
+string Base::get_name()
 {
-	for ( auto pChild : this->_childObjects )
-		if ( pChild->GetObjectName() == name )
-			return pChild;
+	return _name;
+}
 
+Base* Base::get_head()
+{
+	return pParent;
+}
+
+Base* Base::get_sub_obj( string _name )
+{
+	for ( int i = 0; i < pChilds.size(); i++ )
+	{
+		if ( pChilds[i]->_name == _name )
+		{
+			return pChilds[i];
+		}
+	}
 	return nullptr;
 }
 
-Base* Base::FindOnTree( string name )
+int Base::count( string name )
 {
-	Base* pCurrent = this;
-
-	while ( pCurrent->_pParentObject )
-		pCurrent = pCurrent->_pParentObject;
-
-	return pCurrent->FindOnBranch( name );
-}
-
-Base* Base::FindOnBranch( string name )
-{
-	queue<Base*> queue;
-	Base* pFound = nullptr;
-
-	queue.push( this );
-
-
-	while ( !queue.empty() )
+	int count = 0;
+	if ( get_name() == name )
 	{
-		if ( queue.front()->GetObjectName() == name )
-		{
-			if ( pFound == nullptr )
-				pFound = queue.front();
-			else
-				return nullptr;
-		}
-
-		for ( auto pChild : queue.front()->_childObjects )
-			queue.push( pChild );
-
-		queue.pop();
+		count++;
 	}
-
-
-	return pFound;
+	for ( int i = 0; i < pChilds.size(); i++ )
+	{
+		count += pChilds[i]->count( name );
+	}
+	return count;
 }
 
-Base* Base::FindObjectByPath( string path )
+Base* Base::search_by_name( string name )
 {
-	Base *pCurrent = this, *pRoot = this;
-
-	while ( pRoot->_pParentObject )
-		pRoot = pRoot->_pParentObject;
-
-
-	if ( path == "/" )
-		return pRoot;
-
-	if ( path == "." )
+	if ( _name == name )
+	{
 		return this;
-
-	if ( path.substr( 0, 2 ) == "//" )
-		return this->FindOnTree( path.substr( 2 ) );
-
-	if ( path.substr( 0, 1 ) == "." )
-		return this->FindOnBranch( path.substr( 1 ) );
-
-
-	if ( path[0] == '/' )
-	{
-		pCurrent = pRoot;
-		path = path.substr( 1 );
 	}
-
-
-	size_t pos = 0;
-
-	while ( ( pos = path.find( '/' ) ) != string::npos )
+	Base* p_result = nullptr;
+	for ( int i = 0; i < pChilds.size(); i++ )
 	{
-		pCurrent = pCurrent->GetChildByName( path.substr( 0, pos ) );
-
-		if ( !pCurrent )
-			return nullptr;
-
-		path.erase( 0, pos + 1 );
-	}
-
-
-	return pCurrent->GetChildByName( path );
-}
-
-bool Base::SetNewParent( Base* pNewParent )
-{
-	if ( pNewParent && pNewParent != this && !pNewParent->FindOnBranch( this->_objectName ) && this->_pParentObject )
-	{
-		Base* pCurrent = pNewParent;
-
-		while ( pCurrent )
+		p_result = pChilds[i]->search_by_name( name );
+		if ( p_result != nullptr )
 		{
-			pCurrent = pCurrent->_pParentObject;
-
-			if ( pCurrent == this )
-				return false;
+			return p_result;
 		}
-
-
-		this->_pParentObject->_childObjects.erase( find( this->_pParentObject->_childObjects.begin(), this->_pParentObject->_childObjects.end(), this ) );
-		pNewParent->_childObjects.push_back( this );
-		this->_pParentObject = pNewParent;
-
-		return true;
 	}
-
-	return false;
+	return nullptr;
 }
 
-void Base::DeleteChildByName( string name )
+Base* Base::search_cur( string name )
 {
-	Base* pChild = this->GetChildByName( name );
-
-	if ( pChild )
+	if ( count( name ) != 1 )
 	{
-		this->_childObjects.erase( find( this->_childObjects.begin(), this->_childObjects.end(), pChild ) );
-
-		delete pChild;
+		return nullptr;
 	}
-}
-void Base::DisplayHierarchy( int level )
-{
-	cout << endl << string( level * 4, ' ' ) << this->_objectName;
-
-	for ( auto pChild : this->_childObjects )
-		pChild->DisplayHierarchy( level + 1 );
+	return search_by_name( name );
 }
 
-void Base::DisplayHierarchyWithReadiness( int level )
+Base* Base::search_from_root( string name )
 {
-	cout << endl << string( level * 4, ' ' ) << this->_objectName << ( this->_readiness == 0 ? " is not ready" : " is ready" );
-
-	for ( auto pChild : this->_childObjects )
-		pChild->DisplayHierarchyWithReadiness( level + 1 );
-}
-
-void Base::SetReadiness( int state )
-{
-	if ( state != 0 )
+	if ( pParent != nullptr )
 	{
-		Base* current = this->_pParentObject;
-
-		while ( current != nullptr && current->_readiness != 0 )
-			current = current->_pParentObject;
-
-		if ( current == nullptr )
-			this->_readiness = state;
+		return pParent->search_from_root( name );
 	}
 	else
 	{
-		this->_readiness = state;
-
-		for ( auto pChild : this->_childObjects )
-			pChild->SetReadiness( state );
+		return search_cur( name );
 	}
 }
 
-void Base::SetConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pHandler )
+void Base::set_ready( int s_new_ready )
 {
-	for ( auto elem : _connections )
+	if ( s_new_ready != 0 )
 	{
-		if ( elem->Signal == pSignal && elem->TargetObject == pTarget && elem->Handler == pHandler )
+		if ( pParent == nullptr || pParent != nullptr && pParent->_readiness != 0 )
+		{
+			_readiness = s_new_ready;
+		}
+	}
+	else
+	{
+		_readiness = s_new_ready;
+		for ( int i = 0; i < pChilds.size(); i++ )
+		{
+			pChilds[i]->set_ready( s_new_ready );
+		}
+	}
+}
+
+void Base::get_ready( string name )
+{
+	if ( get_name() == name )
+	{
+		if ( _readiness != 0 )
+		{
+			cout << get_name() << " is ready";
+		}
+		else
+		{
+			cout << get_name() << " is not ready";
+		}
+	}
+	else
+	{
+		for ( int i = 0; i < pChilds.size(); i++ )
+		{
+			return pChilds[i]->get_ready( name );
+		}
+	}
+}
+
+bool Base::change_head_obj( Base* new_head_obj )
+{
+	if ( new_head_obj != nullptr )
+	{
+		Base* temp = new_head_obj;
+		while ( temp != nullptr )
+		{
+			temp = temp->pParent;
+			if ( temp == this )
+			{
+				return false;
+			}
+		}
+		if ( new_head_obj->get_sub_obj( get_name() ) == nullptr && pParent != nullptr )
+		{
+			pParent->pChilds.erase( find( pParent->pChilds.begin(), pParent->pChilds.end(), this ) );
+			new_head_obj->pChilds.push_back( this );
+			pParent = new_head_obj;
+			return true;
+		}
+	}
+	return false;
+}
+
+void Base::delete_subordinate_obj( string name )
+{
+	Base* subordinate_obj = get_sub_obj( name );
+	if ( subordinate_obj != nullptr )
+	{
+		pChilds.erase( find( pChilds.begin(), pChilds.end(), subordinate_obj ) );
+		delete subordinate_obj;
+	}
+}
+
+Base* Base::find_obj_by_coord( string s_object_path )
+{
+	if ( s_object_path == "" )
+	{
+		return nullptr;
+	}
+	Base* head_obj = this;
+	string s_path_item;
+	if ( s_object_path == "." || s_object_path == "/" )
+	{
+		return head_obj;
+	}
+	if ( s_object_path[0] == '.' )
+	{
+		s_object_path.erase( s_object_path.begin() );
+		return search_by_name( s_object_path );
+	}
+	if ( s_object_path[1] == '/' && s_object_path[0] == '/' )
+	{
+		s_object_path.erase( s_object_path.begin() );
+		s_object_path.erase( s_object_path.begin() );
+		return this->search_from_root( s_object_path );
+	}
+	if ( s_object_path[0] == '/' )
+	{
+		s_object_path.erase( s_object_path.begin() );
+		while ( head_obj->pParent != nullptr )
+		{
+			head_obj = head_obj->pParent;
+		}
+	}
+	stringstream ss_path( s_object_path );
+	while ( getline( ss_path, s_path_item, '/' ) )
+	{
+		head_obj = head_obj->get_sub_obj( s_path_item );
+		if ( head_obj == nullptr )
+		{
+			return nullptr;
+		}
+	}
+	return head_obj;
+}
+
+void Base::print_from_current( int n )
+{
+	cout << endl;
+	for ( int i = 0; i < n; i++ )
+	{
+		cout << "    ";
+	}
+	cout << _name;
+	for ( auto p_subordinate_object : pChilds )
+	{
+		p_subordinate_object->print_from_current( n + 1 );
+	}
+}
+
+void Base::set_connection( TYPE_SIGNAL pSignal, Base* p_target, TYPE_HANDLER p_handler )
+{
+	Connection* p_value;
+	for ( int i = 0; i < _connections.size(); i++ )
+	{
+		if ( _connections[i]->pSignal == pSignal &&
+			_connections[i]->p_handler == p_handler &&
+			_connections[i]->p_target == p_target )
 		{
 			return;
 		}
 	}
+	p_value = new Connection();
+	p_value->pSignal = pSignal;
+	p_value->p_handler = p_handler;
+	p_value->p_target = p_target;
 
-	Connection* connection = new Connection { pSignal, pTarget, pHandler };
-	this->_connections.push_back( connection );
+	_connections.push_back( p_value );
 }
 
-void Base::DeleteConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pHandler )
+void Base::delete_connection( TYPE_SIGNAL pSignal, Base* p_target, TYPE_HANDLER p_handler )
 {
-	auto it = remove_if( this->_connections.begin(), this->_connections.end(), [&]( Connection* connection )
+	for ( auto p_it = _connections.begin(); p_it != _connections.end(); p_it++ )
 	{
-		return connection->Signal == pSignal && connection->TargetObject == pTarget && connection->Handler == pHandler;
-	} );
-
-	if ( it != this->_connections.end() )
-	{
-		delete *it;
-		this->_connections.erase( it, this->_connections.end() );
+		if ( ( *p_it )->pSignal == pSignal &&
+			( *p_it )->p_target == p_target &&
+			( *p_it )->p_handler == p_handler )
+		{
+			delete* p_it;
+			p_it = _connections.erase( p_it );
+			p_it--;
+		}
 	}
 }
 
-void Base::EmitSignal( TYPE_SIGNAL pSignal, string message )
+void Base::emit_signal( TYPE_SIGNAL pSignal, string s_massege )
 {
-	if ( this->_readiness )
+	if ( _readiness != 0 )
 	{
-		( this->*pSignal )( message );
+		TYPE_HANDLER pHandler;
+		Base* pObject;
+		( this->*pSignal )( s_massege );
+		for ( int i = 0; i < _connections.size(); i++ )
+		{
+			if ( _connections[i]->pSignal == pSignal )
+			{
+				pHandler = _connections[i]->p_handler;
+				pObject = _connections[i]->p_target;
+				if ( pObject->_readiness != 0 )
+				{
+					( pObject->*pHandler )( s_massege );
+				}
+			}
+		}
+	}
+}
+string Base::get_path()
+{
+	Base* pParent = this->get_head();
+	if ( pParent != nullptr )
+	{
+		if ( pParent->get_head() == nullptr )
+		{
+			return pParent->get_path() + _name;
+		}
+		else
+		{
+			return pParent->get_path() + "/" + _name;
+		}
+	}
+	return "/";
+}
 
-		for ( auto elem : this->_connections )
-			if ( elem->Signal == pSignal && elem->TargetObject->_readiness )
-				( elem->TargetObject->*elem->Handler )( message );
+void Base::setState( int state )
+{
+	if ( state == 0 )
+	{
+		this->_readiness = 0;
+		for ( int i = 0; i < pChilds.size(); i++ )
+		{
+			pChilds[i]->setState( 0 );
+		}
+		return;
+	}
+	if ( this->pParent == nullptr || this->pParent->_readiness != 0 )
+	{
+		this->_readiness = state;
 	}
 }
 
-string Base::GetPath()
+
+
+void Base::delete_links( Base* targ )
 {
-	return this->_pParentObject ? this->_pParentObject->GetPath() + "/" + this->_objectName : this->_objectName;
+	for ( auto p_it = _connections.begin(); p_it != _connections.end(); p_it++ )
+	{
+		if ( ( *p_it )->p_target == targ )
+		{
+			delete ( *p_it );
+			_connections.erase( p_it );
+			p_it--;
+		}
+	}
+
+	for ( auto p_sub : pChilds )
+	{
+		p_sub->delete_links( targ );
+	}
+}
+
+Base* Base::get_root()
+{
+	if ( pParent != nullptr )
+	{
+		pParent->get_root();
+	}
+	return this;
 }
