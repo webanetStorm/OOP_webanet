@@ -1,17 +1,18 @@
 #include "Class1.h"
 
-cl_1::cl_1( Base* pParent, string _name ) :Base( pParent, _name )
+
+Class1::Class1( Base* pParent, string name ) : Base( pParent, name )
 {
-	this->number = 1;
+	this->ClassNumber = 1;
 }
 
-void cl_1::signal_f( string& msg )
+void Class1::SignalF( string& message )
 {
-	cout << endl << "Signal from " << this->get_path();
-	msg += " (class: 1)";
+	cout << endl << "Signal from " << this->GetPath();
+	message += " (class: 1)";
 }
 
-void cl_1::handler_f( string msg )
+void Class1::HandlerF( string message )
 {
-	cout << endl << "Signal to " << get_path() << " Text:  " << msg;
+	cout << endl << "Signal to " << GetPath() << " Text:  " << message;
 }

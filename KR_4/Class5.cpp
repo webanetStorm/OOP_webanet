@@ -1,17 +1,18 @@
 #include "Class5.h"
 
-cl_5::cl_5( Base* pParent, string _name ) :Base( pParent, _name )
+
+Class5::Class5( Base* pParent, string name ) : Base( pParent, name )
 {
-	this->number = 5;
+	this->ClassNumber = 5;
 }
 
-void cl_5::signal_f( string& msg )
+void Class5::SignalF( string& message )
 {
-	cout << endl << "Signal from " << this->get_path();
-	msg += " (class: 5)";
+	cout << endl << "Signal from " << this->GetPath();
+	message += " (class: 5)";
 }
 
-void cl_5::handler_f( string msg )
+void Class5::HandlerF( string message )
 {
-	cout << endl << "Signal to " << get_path() << " Text:  " << msg;
+	cout << endl << "Signal to " << GetPath() << " Text:  " << message;
 }

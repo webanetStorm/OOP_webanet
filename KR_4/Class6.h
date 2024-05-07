@@ -1,12 +1,17 @@
-#ifndef __CL_6_H__
-#define __CL_6_H__
+#pragma once
+
 #include "Base.h"
 
-class cl_6 : public Base
+
+class Class6 : public Base
 {
+
 public:
-	cl_6( Base* pParent, string _name );
-	void signal_f( string& msg );
-	void handler_f( string msg );
+
+	Class6( Base* pParent, string name );
+
+	void SignalF( string& message );
+
+	void HandlerF( string message );
+
 };
-#endif

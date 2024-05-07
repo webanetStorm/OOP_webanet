@@ -1,89 +1,114 @@
 #include "Application.h"
 
-void setConnections();
 
-cl_application::cl_application( Base* pParent ) : Base( pParent )
+Application::Application( Base* pParent ) : Base( pParent )
 {
 }
 
-void cl_application::build_tree_objects()
+void Application::BuildTreeObjects()
 {
-	string s_head, s_sub;
-	int s_num_obj;
-	Base* p_head = this, * p_sub = nullptr;
-	cin >> s_head;
-	set_name( s_head );
-	while ( true )
+	Base *pParentObject = this, *pChildObject = nullptr;
+	string parentName, childName;
+	int classNumber;
+
+	cin >> parentName;
+	this->SetName( parentName );
+
+
+	while ( cin >> parentName, parentName != "endtree" )
 	{
-		cin >> s_head;
-		if ( s_head == "endtree" )
+
+		cin >> childName >> classNumber;
+
+		if ( pParentObject )
 		{
-			break;
-		}
-		cin >> s_sub >> s_num_obj;
-		if ( p_head != nullptr )
-		{
-			p_head = find_obj_by_coord( s_head );
-			switch ( s_num_obj )
+			pParentObject = this->FindObjectByPath( parentName );
+
+			switch ( classNumber )
 			{
 				case 1:
-					p_sub = new cl_1( p_head, s_sub );
+					pChildObject = new Class1( pParentObject, childName );
 					break;
 				case 2:
-					p_sub = new cl_2( p_head, s_sub );
+					pChildObject = new Class2( pParentObject, childName );
 					break;
 				case 3:
-					p_sub = new cl_3( p_head, s_sub );
+					pChildObject = new Class3( pParentObject, childName );
 					break;
 				case 4:
-					p_sub = new cl_4( p_head, s_sub );
+					pChildObject = new Class4( pParentObject, childName );
 					break;
 				case 5:
-					p_sub = new cl_5( p_head, s_sub );
+					pChildObject = new Class5( pParentObject, childName );
 					break;
 				case 6:
-					p_sub = new cl_6( p_head, s_sub );
+					pChildObject = new Class6( pParentObject, childName );
 					break;
 			}
 		}
 		else
 		{
 			cout << "Object tree";
-			print_from_current();
-			cout << endl << "The head object " << s_head << " is not found";
+			this->Display();
+			cout << endl << "The head object " << parentName << " is not found";
+
 			exit( 1 );
 		}
+
 	}
 }
 
-void cl_application::build_commands()
+int Application::ExecApp()
 {
-	string line, command, coord, text;
-	vector <TYPE_SIGNAL> SIGNALS_LIST =
+	cout << "Object tree";
+
+	this->Display();
+
+
+
+	Base *pSender, *pReceiver;
+	string senderPath, receiverPath, line, command, path, text;
+
+
+	vector<TYPE_SIGNAL> SIGNALS_LIST =
 	{
-		SIGNAL_D( cl_1::signal_f ),
-		SIGNAL_D( cl_2::signal_f ),
-		SIGNAL_D( cl_3::signal_f ),
-		SIGNAL_D( cl_4::signal_f ),
-		SIGNAL_D( cl_5::signal_f ),
-		SIGNAL_D( cl_6::signal_f )
+		SIGNAL_D( Class1::SignalF ),
+		SIGNAL_D( Class2::SignalF ),
+		SIGNAL_D( Class3::SignalF ),
+		SIGNAL_D( Class4::SignalF ),
+		SIGNAL_D( Class5::SignalF ),
+		SIGNAL_D( Class6::SignalF )
 	};
 	vector<TYPE_HANDLER> HANDLERS_LIST =
 	{
-		HANDLER_D( cl_1::handler_f ),
-		HANDLER_D( cl_2::handler_f ),
-		HANDLER_D( cl_3::handler_f ),
-		HANDLER_D( cl_4::handler_f ),
-		HANDLER_D( cl_5::handler_f ),
-		HANDLER_D( cl_6::handler_f )
+		HANDLER_D( Class1::HandlerF ),
+		HANDLER_D( Class2::HandlerF ),
+		HANDLER_D( Class3::HandlerF ),
+		HANDLER_D( Class4::HandlerF ),
+		HANDLER_D( Class5::HandlerF ),
+		HANDLER_D( Class6::HandlerF )
 	};
-	while ( true )
+
+	while ( cin >> senderPath, senderPath != "end_of_connections" )
 	{
-		getline( cin, line );
+		cin >> receiverPath;
+
+		pSender = this->FindObjectByPath( senderPath );
+		pReceiver = this->FindObjectByPath( receiverPath );
+
+		pSender->SetConnection( SIGNALS_LIST[pSender->ClassNumber - 1], pReceiver, HANDLERS_LIST[pReceiver->ClassNumber - 1] );
+	}
+
+	
+
+	while ( getline( cin, line ) )
+	{
+
 		command = line.substr( 0, line.find( ' ' ) );
 		line = line.substr( line.find( ' ' ) + 1, line.size() - 1 );
-		coord = line.substr( 0, line.find( ' ' ) );
+		path = line.substr( 0, line.find( ' ' ) );
 		text = line.substr( line.find( ' ' ) + 1 );
+
 		if ( command == "END" )
 		{
 			break;
@@ -92,92 +117,45 @@ void cl_application::build_commands()
 		{
 			continue;
 		}
-		Base* pSender = this->find_obj_by_coord( coord );
+
+
+		Base* pSender = this->FindObjectByPath( path );
+
 		if ( pSender == nullptr )
 		{
-			cout << endl << "Object " << coord << " not found";
+			cout << endl << "Object " << path << " not found";
 			continue;
 		}
 		if ( command == "EMIT" )
 		{
-			TYPE_SIGNAL signal = SIGNALS_LIST[pSender->number - 1];
-			pSender->emit_signal( signal, text );
+			TYPE_SIGNAL signal = SIGNALS_LIST[pSender->ClassNumber - 1];
+			pSender->EmitSignal( signal, text );
 		}
 		if ( command == "SET_CONNECT" )
 		{
-			Base* pReceiver = this->find_obj_by_coord( text );
-			if ( pReceiver == nullptr )
-			{
+			Base* pReceiver = this->FindObjectByPath( text );
+
+			if ( !pReceiver )
 				cout << endl << "Handler object " << text << " not found";
-			}
-			TYPE_SIGNAL signal = SIGNALS_LIST[pSender->number - 1];
-			TYPE_HANDLER handler = HANDLERS_LIST[pReceiver->number - 1];
-			pSender->set_connection( signal, pReceiver, handler );
+
+			pSender->SetConnection( SIGNALS_LIST[pSender->ClassNumber - 1], pReceiver, HANDLERS_LIST[pReceiver->ClassNumber - 1] );
 		}
 		if ( command == "DELETE_CONNECT" )
 		{
-			Base* pReceiver = this->find_obj_by_coord( text );
-			if ( pReceiver == nullptr )
-			{
+			Base* pReceiver = this->FindObjectByPath( text );
+
+			if ( !pReceiver )
 				cout << endl << "Handler object " << text << " not found";
-			}
 			else
-			{
-				TYPE_SIGNAL signal = SIGNALS_LIST[pSender->number - 1];
-				TYPE_HANDLER handler = HANDLERS_LIST[pReceiver->number - 1];
-				pSender->delete_connection( signal, pReceiver, handler );
-			}
+				pSender->DeleteConnection( SIGNALS_LIST[pSender->ClassNumber - 1], pReceiver, HANDLERS_LIST[pReceiver->ClassNumber - 1] );
 		}
 		if ( command == "SET_CONDITION" )
 		{
-			int state = stoi( text );
-			pSender->setState( state );
+			pSender->SetReadiness( stoi( text ) );
 		}
-	}
-}
 
-int cl_application::exec_app()
-{
-	cout << "Object tree";
-	print_from_current();
-	this->setConnections();
-	build_commands();
+	}
+
+
 	return 0;
-}
-
-void cl_application::setConnections()
-{
-	string senderCoord;
-	string receiverCoord;
-	Base* pSender;
-	Base* pReceiver;
-	vector<TYPE_SIGNAL> SIGNALS_LIST =
-	{
-		SIGNAL_D( cl_1::signal_f ),
-		SIGNAL_D( cl_2::signal_f ),
-		SIGNAL_D( cl_3::signal_f ),
-		SIGNAL_D( cl_4::signal_f ),
-		SIGNAL_D( cl_5::signal_f ),
-		SIGNAL_D( cl_6::signal_f )
-	};
-	vector<TYPE_HANDLER> HANDLERS_LIST =
-	{
-		HANDLER_D( cl_1::handler_f ),
-		HANDLER_D( cl_2::handler_f ),
-		HANDLER_D( cl_3::handler_f ),
-		HANDLER_D( cl_4::handler_f ),
-		HANDLER_D( cl_5::handler_f ),
-		HANDLER_D( cl_6::handler_f )
-	};
-	while ( true )
-	{
-		cin >> senderCoord;
-		if ( senderCoord == "end_of_connections" ) break;
-		cin >> receiverCoord;
-		pSender = this->find_obj_by_coord( senderCoord );
-		pReceiver = this->find_obj_by_coord( receiverCoord );
-		TYPE_SIGNAL signal = SIGNALS_LIST[pSender->number - 1];
-		TYPE_HANDLER handler = HANDLERS_LIST[pReceiver->number - 1];
-		pSender->set_connection( signal, pReceiver, handler );
-	}
 }
