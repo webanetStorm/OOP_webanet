@@ -34,7 +34,7 @@ string Base::GetName()
 
 string Base::GetPath()
 {
-	return this->_pParent ? this->_pParent->GetPath() + "/" + this->_name : this->_name;
+	return this->_pParent ? this->_pParent->_pParent ? this->_pParent->GetPath() + "/" + this->_name : this->_pParent->GetPath() + this->_name : "/";
 }
 
 Base* Base::GetRoot()
@@ -249,16 +249,20 @@ void Base::EmitSignal( TYPE_SIGNAL pSignal, string message )
 
 void Base::DeleteLinks( Base* pTarget )
 {
-	for ( auto it = _connections.begin(); it != _connections.end(); it++ )
+	auto it = remove_if( this->_connections.begin(), this->_connections.end(), [pTarget]( Connection* connection )
 	{
-		if ( ( *it )->Target == pTarget )
+		if ( connection->Target == pTarget )
 		{
-			delete ( *it );
-			_connections.erase( it );
-			it--;
-		}
-	}
+			delete connection;
 
-	for ( auto pChild : _childs )
+			return true;
+		}
+
+		return false;
+	} );
+
+	this->_connections.erase( it, this->_connections.end() );
+
+	for ( auto pChild : this->_childs )
 		pChild->DeleteLinks( pTarget );
 }

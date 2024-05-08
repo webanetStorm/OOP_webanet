@@ -89,6 +89,7 @@ int Application::ExecApp()
 		HANDLER_D( Class6::HandlerF )
 	};
 
+
 	while ( cin >> senderPath, senderPath != "end_of_connections" )
 	{
 		cin >> receiverPath;
@@ -99,7 +100,7 @@ int Application::ExecApp()
 		pSender->SetConnection( SIGNALS_LIST[pSender->ClassNumber - 1], pReceiver, HANDLERS_LIST[pReceiver->ClassNumber - 1] );
 	}
 
-	
+
 
 	while ( getline( cin, line ) )
 	{
@@ -137,8 +138,8 @@ int Application::ExecApp()
 
 			if ( !pReceiver )
 				cout << endl << "Handler object " << text << " not found";
-
-			pSender->SetConnection( SIGNALS_LIST[pSender->ClassNumber - 1], pReceiver, HANDLERS_LIST[pReceiver->ClassNumber - 1] );
+			else
+				pSender->SetConnection( SIGNALS_LIST[pSender->ClassNumber - 1], pReceiver, HANDLERS_LIST[pReceiver->ClassNumber - 1] );
 		}
 		if ( command == "DELETE_CONNECT" )
 		{
