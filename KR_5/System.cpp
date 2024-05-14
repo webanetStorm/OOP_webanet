@@ -1,11 +1,11 @@
-#include "Application.h"
+#include "System.h"
 
 
-Application::Application( Base* pParent ) : Base( pParent )
+System::System( Base* pParent ) : Base( pParent )
 {
 }
 
-void Application::BuildTreeObjects()
+void System::BuildTreeObjects()
 {
 	Base *pParentObject = this, *pChildObject = nullptr;
 	string parentName, childName;
@@ -27,22 +27,22 @@ void Application::BuildTreeObjects()
 			switch ( classNumber )
 			{
 				case 1:
-					pChildObject = new Class1( pParentObject, childName );
+					pChildObject = new SystemInput( pParentObject, childName );
 					break;
 				case 2:
-					pChildObject = new Class2( pParentObject, childName );
+					pChildObject = new CraneController( pParentObject, childName );
 					break;
 				case 3:
-					pChildObject = new Class3( pParentObject, childName );
+					pChildObject = new CargoPlatform( pParentObject, childName );
 					break;
 				case 4:
-					pChildObject = new Class4( pParentObject, childName );
+					pChildObject = new ConstructionFloor( pParentObject, childName );
 					break;
 				case 5:
-					pChildObject = new Class5( pParentObject, childName );
+					pChildObject = new Cargo( pParentObject, childName );
 					break;
 				case 6:
-					pChildObject = new Class6( pParentObject, childName );
+					pChildObject = new InformationDisplay( pParentObject, childName );
 					break;
 			}
 		}
@@ -58,7 +58,7 @@ void Application::BuildTreeObjects()
 	}
 }
 
-int Application::ExecApp()
+int System::ExecApp()
 {
 	cout << "Object tree";
 
@@ -72,21 +72,21 @@ int Application::ExecApp()
 
 	vector<TYPE_SIGNAL> SIGNALS_LIST =
 	{
-		SIGNAL_D( Class1::SignalF ),
-		SIGNAL_D( Class2::SignalF ),
-		SIGNAL_D( Class3::SignalF ),
-		SIGNAL_D( Class4::SignalF ),
-		SIGNAL_D( Class5::SignalF ),
-		SIGNAL_D( Class6::SignalF )
+		SIGNAL_D( SystemInput::SignalF ),
+		SIGNAL_D( CraneController::SignalF ),
+		SIGNAL_D( CargoPlatform::SignalF ),
+		SIGNAL_D( ConstructionFloor::SignalF ),
+		SIGNAL_D( Cargo::SignalF ),
+		SIGNAL_D( InformationDisplay::SignalF )
 	};
 	vector<TYPE_HANDLER> HANDLERS_LIST =
 	{
-		HANDLER_D( Class1::HandlerF ),
-		HANDLER_D( Class2::HandlerF ),
-		HANDLER_D( Class3::HandlerF ),
-		HANDLER_D( Class4::HandlerF ),
-		HANDLER_D( Class5::HandlerF ),
-		HANDLER_D( Class6::HandlerF )
+		HANDLER_D( SystemInput::HandlerF ),
+		HANDLER_D( CraneController::HandlerF ),
+		HANDLER_D( CargoPlatform::HandlerF ),
+		HANDLER_D( ConstructionFloor::HandlerF ),
+		HANDLER_D( Cargo::HandlerF ),
+		HANDLER_D( InformationDisplay::HandlerF )
 	};
 
 
