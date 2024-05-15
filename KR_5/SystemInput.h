@@ -10,10 +10,6 @@ public:
 
 	SystemInput( Base* pParent, string name );
 
-	void SignalF( string& message );
-
-	void HandlerF( string message );
-
-	void ProcessCommands();
+	virtual void HandlerF( string message );
 
 };

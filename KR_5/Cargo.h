@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Base.h"
+#include "CargoPlatform.h"
 
 
-class Cargo : public Base
+class Cargo : public CargoPlatform
 {
 
 private:
@@ -13,9 +14,7 @@ private:
 
 public:
 
-	Cargo( Base* pParent, double length, double width, double height, string name ) : Base( pParent, name ), _length( length ), _width( width ), _height( height )
-	{
-	};
+	Cargo( Base* pParent, double length, double width, double height, string name );
 
 	void SignalF( string& message );
 

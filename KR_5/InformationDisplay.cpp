@@ -6,13 +6,10 @@ InformationDisplay::InformationDisplay( Base* pParent, string name ) : Base( pPa
 	this->ClassNumber = 6;
 }
 
-void InformationDisplay::SignalF( string& message )
-{
-	cout << endl << "Signal from " << this->GetPath();
-	message += " (class: 6)";
-}
-
 void InformationDisplay::HandlerF( string message )
 {
-	cout << endl << "Signal to " << GetPath() << " Text:  " << message;
+	if ( message != "Ready to work" )
+		cout << endl;
+
+	cout << message;
 }

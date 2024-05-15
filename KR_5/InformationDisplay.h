@@ -10,10 +10,6 @@ public:
 
 	InformationDisplay( Base* pParent, string name );
 
-	void SignalF( string& message );
-
-	void HandlerF( string message );
-
-	void DisplayMessage( string message );
+	virtual void HandlerF( string message );
 
 };

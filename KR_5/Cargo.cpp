@@ -1,7 +1,8 @@
 #include "Cargo.h"
+#include "CargoPlatform.h"
 
 
-Cargo::Cargo( Base* pParent, double length, double width, double height, string name ) : Base( pParent, name )
+Cargo::Cargo( Base* pParent, double length, double width, double height, string name ) : CargoPlatform( pParent, name ), _length( length ), _width( width ), _height( height )
 {
 	this->ClassNumber = 5;
 }
@@ -14,5 +15,5 @@ void Cargo::SignalF( string& message )
 
 void Cargo::HandlerF( string message )
 {
-	cout << endl << "Signal to " << GetPath() << " Text:  " << message;
+	cout << endl << "Signal to " << this->GetPath() << " Text:  " << message;
 }

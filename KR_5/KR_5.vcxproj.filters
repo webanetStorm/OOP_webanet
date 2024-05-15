@@ -15,57 +15,57 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="KR_4.cpp">
+    <ClCompile Include="KR_5.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Application.cpp">
+    <ClCompile Include="System.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Base.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Class1.cpp">
+    <ClCompile Include="SystemInput.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Class2.cpp">
+    <ClCompile Include="CraneController.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Class3.cpp">
+    <ClCompile Include="CargoPlatform.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Class4.cpp">
+    <ClCompile Include="ConstructionFloor.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Class5.cpp">
+    <ClCompile Include="Cargo.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Class6.cpp">
+    <ClCompile Include="InformationDisplay.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Application.h">
+    <ClInclude Include="System.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Base.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Class1.h">
+    <ClInclude Include="SystemInput.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Class2.h">
+    <ClInclude Include="CraneController.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Class3.h">
+    <ClInclude Include="CargoPlatform.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Class4.h">
+    <ClInclude Include="ConstructionFloor.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Class5.h">
+    <ClInclude Include="Cargo.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Class6.h">
+    <ClInclude Include="InformationDisplay.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
