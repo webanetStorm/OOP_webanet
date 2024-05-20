@@ -1,267 +1,355 @@
 #include "Base.h"
 
+#include <vector>
+#include <iostream>
+#include <sstream>
+using namespace std;
 
-Base::Base( Base* pParent, string name ) : _pParent( pParent ), _name( name )
+Base::Base( Base* parent, string name )
 {
-	if ( _pParent )
-		this->_pParent->_children.push_back( this );
+	this->parent = parent;
+	this->name = name;
+
+	if ( parent )
+	{
+		parent->children.push_back( this );
+	}
 }
 
-Base::~Base()
+bool Base::set_name( string new_name )
 {
-	this->GetRoot()->DeleteLinks( this );
-
-	for ( auto pChild : this->_children )
-		delete pChild;
-}
-
-bool Base::SetName( string name )
-{
-	if ( this->_pParent )
-		for ( auto pChild : this->_pParent->_children )
-			if ( pChild->GetName() == name )
+	if ( parent )
+	{
+		for ( Base* child : parent->children )
+		{
+			if ( child->get_name() == new_name )
 				return false;
+		}
+	}
 
-	this->_name = name;
-
+	name = new_name;
 	return true;
 }
 
-string Base::GetName()
+string Base::get_name()
 {
-	return _name;
+	return name;
 }
 
-string Base::GetPath()
+Base* Base::get_parent()
 {
-	return this->_pParent ? this->_pParent->_pParent ? this->_pParent->GetPath() + "/" + this->_name : this->_pParent->GetPath() + this->_name : "/";
+	return parent;
 }
 
-Base* Base::GetRoot()
+void Base::print_tree( int step )
 {
-	if ( _pParent )
-		_pParent->GetRoot();
+	if ( children.empty() )
+		return;
 
-	return this;
+	if ( !get_parent() )
+		cout << name;
+
+	for ( Base* child : children )
+	{
+		cout << endl;
+		for ( int i = 0; i < step; i++ )
+			cout << "    ";
+		cout << child->get_name();
+		child->print_tree( step + 1 );
+	}
 }
 
-Base* Base::GetParent()
+Base* Base::get_child( string child_name )
 {
-	return _pParent;
-}
-
-Base* Base::GetChildByName( string name )
-{
-	for ( auto pChild : this->_children )
-		if ( pChild->GetName() == name )
-			return pChild;
+	for ( Base* child : children )
+	{
+		if ( child->get_name() == child_name )
+			return child;
+	}
 
 	return nullptr;
 }
 
-Base* Base::FindOnBranch( string name )
+Base* Base::find_in_tree( string obj_name )
 {
-	queue<Base*> queue;
-	Base* pFound = nullptr;
-
-	queue.push( this );
-
-
-	while ( !queue.empty() )
-	{
-		if ( queue.front()->GetName() == name )
-		{
-			if ( pFound == nullptr )
-				pFound = queue.front();
-			else
-				return nullptr;
-		}
-
-		for ( auto pChild : queue.front()->_children )
-			queue.push( pChild );
-
-		queue.pop();
-	}
-
-
-	return pFound;
-}
-
-Base* Base::FindOnTree( string name )
-{
-	Base* pCurrent = this;
-
-	while ( pCurrent->_pParent )
-		pCurrent = pCurrent->_pParent;
-
-	return pCurrent->FindOnBranch( name );
-}
-
-Base* Base::FindObjectByPath( string path )
-{
-	Base *pCurrent = this, *pRoot = this->GetRoot();
-
-
-	if ( path == "/" )
-		return pRoot;
-
-	if ( path == "." )
+	if ( obj_name == get_name() )
 		return this;
 
-	if ( path.substr( 0, 2 ) == "//" )
-		return this->FindOnTree( path.substr( 2 ) );
-
-	if ( path.substr( 0, 1 ) == "." )
-		return this->FindOnBranch( path.substr( 1 ) );
-
-
-	if ( path[0] == '/' )
+	for ( Base* child : children )
 	{
-		pCurrent = pRoot;
-		path = path.substr( 1 );
+		Base* obj = child->find_in_tree( obj_name );
+		if ( obj ) return obj;
 	}
 
-
-	size_t pos = 0;
-
-	while ( ( pos = path.find( '/' ) ) != string::npos )
-	{
-		pCurrent = pCurrent->GetChildByName( path.substr( 0, pos ) );
-
-		if ( !pCurrent )
-			return nullptr;
-
-		path.erase( 0, pos + 1 );
-	}
-
-
-	return pCurrent->GetChildByName( path );
+	return nullptr;
 }
 
-bool Base::SetNewParent( Base* pNewParent )
+void Base::set_state( int state )
 {
-	if ( pNewParent && pNewParent != this && !pNewParent->FindOnBranch( this->_name ) && this->_pParent )
+	if ( state == 0 )
 	{
-		Base* pCurrent = pNewParent;
-
-		while ( pCurrent )
+		this->state = 0;
+		for ( auto child : children )
 		{
-			pCurrent = pCurrent->_pParent;
-
-			if ( pCurrent == this )
-				return false;
+			child->set_state( 0 );
 		}
-
-
-		this->_pParent->_children.erase( find( this->_pParent->_children.begin(), this->_pParent->_children.end(), this ) );
-		pNewParent->_children.push_back( this );
-		this->_pParent = pNewParent;
-
-		return true;
-	}
-
-	return false;
-}
-
-void Base::DeleteChildByName( string name )
-{
-	Base* pChild = this->GetChildByName( name );
-
-	if ( pChild )
-	{
-		this->_children.erase( find( this->_children.begin(), this->_children.end(), pChild ) );
-
-		delete pChild;
-	}
-}
-
-void Base::Display( int level )
-{
-	cout << endl << string( level * 4, ' ' ) << this->_name;
-
-	for ( auto pChild : this->_children )
-		pChild->Display( level + 1 );
-}
-
-void Base::DisplayWithReadiness( int level )
-{
-	cout << endl << string( level * 4, ' ' ) << this->_name << ( this->_readiness == 0 ? " is not ready" : " is ready" );
-
-	for ( auto pChild : this->_children )
-		pChild->DisplayWithReadiness( level + 1 );
-}
-
-void Base::SetReadiness( int state )
-{
-	if ( state != 0 )
-	{
-		Base* current = this->_pParent;
-
-		while ( current != nullptr && current->_readiness != 0 )
-			current = current->_pParent;
-
-		if ( current == nullptr )
-			this->_readiness = state;
 	}
 	else
 	{
-		this->_readiness = state;
+		auto obj = this->get_parent();
 
-		for ( auto pChild : this->_children )
-			pChild->SetReadiness( state );
+		while ( obj )
+		{
+			if ( obj->get_state() == 0 )
+				return;
+
+			obj = obj->get_parent();
+		}
+		this->state = state;
 	}
 }
 
-void Base::SetConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pHandler )
+int Base::get_state()
 {
-	for ( auto elem : _connections )
-		if ( elem->Signal == pSignal && elem->Target == pTarget && elem->Handler == pHandler )
+	return state;
+}
+
+void Base::print_tree_states( int step )
+{
+	if ( children.empty() )
+		return;
+
+	for ( Base* child : children )
+	{
+		cout << endl;
+
+		for ( int i = 0; i < step; i++ )
+			cout << "    ";
+
+		if ( child->get_state() != 0 )
+		{
+			cout << child->get_name() << " is ready";
+		}
+		else
+		{
+			cout << child->get_name() << " is not ready";
+		}
+
+		child->print_tree_states( step + 1 );
+	}
+}
+
+Base* Base::find_by_coords( string coords )
+{
+	if ( coords[0] == '/' )
+	{
+		Base* obj = this;
+
+		while ( obj->get_parent() )
+			obj = obj->get_parent();
+
+		if ( coords.substr( 0, 2 ) == "//" )
+			return obj->find( coords.substr( 2 ) );
+
+		if ( coords == "/" ) return obj;
+		return obj->find_by_coords( coords.substr( 1 ) );
+	}
+	else if ( coords[0] == '.' )
+	{
+		if ( coords == "." ) return this;
+
+		return find( coords.substr( 1 ) );
+	}
+	else
+	{
+		int i = 0;
+		while ( ( i < coords.length() ) && ( coords[i] != '/' ) ) i++;
+		string obj_name = coords.substr( 0, i );
+
+		auto obj = get_child( obj_name );
+		if ( obj && coords.substr( i ) != "" )
+			return obj->find_by_coords( coords.substr( i + 1 ) );
+		return obj;
+	}
+}
+
+Base* Base::find( string obj_name )
+{
+	int count = 0;
+	auto found_obj = find_with_count( obj_name, count );
+
+	if ( count > 1 ) return nullptr;
+	return found_obj;
+}
+
+Base* Base::find_with_count( string obj_name, int& count )
+{
+	Base* found_obj = nullptr;
+
+	if ( name == obj_name )
+	{
+		count++;
+		found_obj = this;
+	}
+
+	for ( auto child : children )
+	{
+		auto obj = child->find_with_count( obj_name, count );
+		if ( obj ) found_obj = obj;
+	}
+
+	return found_obj;
+}
+
+void Base::del_child( string obj_name )
+{
+	for ( auto iter = children.begin(); iter != children.end(); iter++ )
+	{
+		if ( ( *iter )->get_name() == obj_name )
+		{
+			children.erase( iter );
+			break;
+		}
+	}
+}
+
+Base::~Base()
+{
+	for ( auto child : children )
+		delete child;
+}
+
+bool Base::is_child( Base* obj )
+{
+	for ( auto child : children )
+	{
+		if ( child == obj )
+			return true;
+
+		if ( child->is_child( obj ) )
+			return true;
+	}
+	return false;
+}
+
+bool Base::set_parent( Base* obj )
+{
+	if ( !get_parent() || obj->get_child( get_name() )
+		|| !obj || is_child( obj ) )
+		return false;
+
+	get_parent()->del_child( name );
+	obj->add_child( this );
+	parent = obj;
+
+	return true;
+}
+
+void Base::add_child( Base* obj )
+{
+	children.push_back( obj );
+}
+
+string Base::get_abs_coords()
+{
+	if ( !get_parent() ) return "/";
+
+	Base* obj = this;
+	string path = "";
+
+	while ( obj->get_parent() )
+	{
+		path = "/" + obj->get_name() + path;
+		obj = obj->get_parent();
+	}
+
+	return path;
+}
+
+void Base::set_connect( TYPE_SIGNAL signal, Base* obj, TYPE_HANDLER handler )
+{
+	Connection* p_val;
+
+	for ( unsigned int i = 0; i < connections.size(); i++ )
+	{
+		if ( connections[i]->signal == signal &&
+			connections[i]->obj == obj &&
+			connections[i]->handler == handler )
+		{
 			return;
-
-	this->_connections.push_back( new Connection { pSignal, pHandler, pTarget } );
-}
-
-void Base::DeleteConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pHandler )
-{
-	remove_if( this->_connections.begin(), this->_connections.end(), [&]( Connection* connection )
-	{
-		if ( connection->Signal == pSignal && connection->Target == pTarget && connection->Handler == pHandler )
-		{
-			delete connection;
-
-			return true;
 		}
+	}
 
-		return false;
-	} );
+	p_val = new Connection();
+
+	p_val->signal = signal;
+	p_val->obj = obj;
+	p_val->handler = handler;
+
+	connections.push_back( p_val );
 }
 
-void Base::EmitSignal( TYPE_SIGNAL pSignal, string message )
-{
-	if ( this->_readiness )
-	{
-		( this->*pSignal )( message );
 
-		for ( auto elem : this->_connections )
-			if ( elem->Signal == pSignal && elem->Target->_readiness )
-				( elem->Target->*elem->Handler )( message );
+void Base::del_connect( TYPE_SIGNAL signal, Base* obj, TYPE_HANDLER handler )
+{
+	for ( auto it = connections.begin(); it != connections.end(); it++ )
+	{
+		if ( ( *it )->signal == signal &&
+			( *it )->obj == obj &&
+			( *it )->handler == handler )
+		{
+			connections.erase( it );
+			break;
+		}
 	}
 }
 
-void Base::DeleteLinks( Base* pTarget )
+void Base::emit_signal( TYPE_SIGNAL signal, Base* object, string& command )
 {
-	remove_if( this->_connections.begin(), this->_connections.end(), [pTarget]( Connection* connection )
+	if ( !get_state() ) return;
+
+	TYPE_HANDLER handler;
+	Base* obj;
+
+	( this->*signal ) ( command );
+
+	for ( auto connection : connections )
 	{
-		if ( connection->Target == pTarget )
+
+		if ( connection->signal == signal && connection->obj->get_state() )
 		{
-			delete connection;
 
-			return true;
+			if ( connection->obj->get_name() == object->get_name() )
+			{
+				handler = connection->handler;
+				obj = connection->obj;
+
+				( obj->*handler ) ( command );
+
+				break;
+			}
 		}
+	}
+}
 
-		return false;
-	} );
+void Base::signal_f( string& command )
+{
+	//cout << endl << "Signal from " << this->get_abs_coords();
+}
 
-	for ( auto pChild : this->_children )
-		pChild->DeleteLinks( pTarget );
+void Base::handler_f( string command )
+{
+	//cout << endl << "Signal to " << this->get_abs_coords() << " Text: " << command;
+}
+
+vector<string> Base::get_words( string str )
+{
+	vector<string> words;
+
+	istringstream ist( str );
+	for ( string word; ist >> word;)
+	{
+		words.push_back( word );
+	}
+	return words;
 }

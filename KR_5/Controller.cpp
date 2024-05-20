@@ -1,42 +1,47 @@
-#include "CraneController.h"
+#define _USE_MATH_DEFINES
+#include "Controller.h"
+#include "Area.h"
+#include "Output.h"
+#include "Cargo.h"
+#include <cmath>
+#include <math.h>
 
 
-CraneController::CraneController( Base* pParent, string name ) : Base( pParent, name )
+Controller::Controller( Base* parent, string name ) : Base( parent, name )
 {
-	this->ClassNumber = 2;
 }
 
-void CraneController::HandlerF( string message )
+void Controller::handler_f( string command )
 {
-	vector<string> words = this->GetWords( message );
+	vector<string> words = get_words( command );
 
-	if ( message.find( "Submit the cargo" ) != string::npos )
+	if ( command.find( "Submit the cargo" ) != string::npos )
 	{
 		floor_sqr_num = stoi( words[4] );
-		this->FindCargo( words[3] );
+		find_cargo( words[3] );
 	}
-	else if ( message == "Condition of the tower crane" )
+	else if ( command == "Condition of the tower crane" )
 	{
-		this->CraneInfo();
+		crane_info();
 	}
-	else if ( message == "" )
+	else if ( command == "" )
 	{
-		if ( this->GetReadiness() != 1 )
-			this->Work( this->_cargoId );
+		if ( get_state() != 1 )
+			work( carg_id );
 	}
 	else
 	{
-		this->_houseLength = stoi( words[0] );
-		this->_houseWidth = stoi( words[1] );
-		this->_floor = stoi( words[2] );
+		n = stoi( words[0] );
+		m = stoi( words[1] );
+		E = stoi( words[2] );
 	}
 }
 
-void CraneController::FindCargo( string id )
+void Controller::find_cargo( string id )
 {
-	Base* root = this->GetParent();
+	Base* root = get_parent();
 	string text = "";
-	auto cargo = root->FindOnTree( id );
+	auto cargo = root->find_in_tree( id );
 
 	if ( !cargo )
 	{
@@ -44,13 +49,13 @@ void CraneController::FindCargo( string id )
 	}
 	else
 	{
-		auto par_obj = cargo->GetParent();
+		auto par_obj = cargo->get_parent();
 
 		if ( par_obj == this )
 		{
 			text = "The cargo " + id + " is located on the hook of the tower crane";
 		}
-		else if ( par_obj->GetName() == "Floor area" )
+		else if ( par_obj->get_name() == "Floor area" )
 		{
 			text = "The cargo " + id + " is located on the floor";
 		}
@@ -80,19 +85,25 @@ void CraneController::FindCargo( string id )
 	}
 	if ( text != "" )
 	{
-		this->EmitSignal( SIGNAL_D( Base::SignalF ), root->GetChildByName( "Output object" ), text );
+		auto output = root->get_child( "Output object" );
+		emit_signal( SIGNAL_D( Base::signal_f ), output, text );
+		//cout << "sdjsfksfjk";
 	}
-	else 
-		Work( id );
+	else work( id );
 }
 
-void CraneController::Work( string id )
+void Controller::work( string id )
 {
 
 	Cargo* cargo = (Cargo*)get_parent()->find_in_tree( id );
-	Area* area;
+	Area* area =nullptr;
 	if ( get_parent() != this )
 		area = (Area*)( cargo->get_parent() );
+
+	if ( !area )
+	{
+		return;
+	}
 
 	switch ( get_state() )
 	{
@@ -177,7 +188,9 @@ void CraneController::Work( string id )
 		set_state( 1 );
 }
 
-void CraneController::CraneInfo()
+void Controller::crane_info()
 {
-	this->EmitSignal( SIGNAL_D( Base::SignalF ), GetParent()->GetChildByName( "Output object" ), "Tower crane " + to_string( this->_boomAnegle ) + "  " + to_string( this->_boomLength ) );
+	auto output = get_parent()->get_child( "Output object" );
+	string text = "Tower crane " + to_string( angle ) + "  " + to_string( d );
+	emit_signal( SIGNAL_D( Base::signal_f ), output, text );
 }

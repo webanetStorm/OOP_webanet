@@ -127,25 +127,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="System.cpp" />
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="Base.cpp" />
-    <ClCompile Include="SystemInput.cpp" />
-    <ClCompile Include="CraneController.cpp" />
-    <ClCompile Include="CargoPlatform.cpp" />
-    <ClCompile Include="ConstructionFloor.cpp" />
+    <ClCompile Include="Input.cpp" />
+    <ClCompile Include="Controller.cpp" />
+    <ClCompile Include="Area.cpp" />
+    <ClCompile Include="AreaFloor.cpp" />
     <ClCompile Include="Cargo.cpp" />
-    <ClCompile Include="InformationDisplay.cpp" />
+    <ClCompile Include="Output.cpp" />
     <ClCompile Include="KR_5.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="System.h" />
+    <ClInclude Include="App.h" />
     <ClInclude Include="Base.h" />
-    <ClInclude Include="SystemInput.h" />
-    <ClInclude Include="CraneController.h" />
-    <ClInclude Include="CargoPlatform.h" />
-    <ClInclude Include="ConstructionFloor.h" />
+    <ClInclude Include="Input.h" />
+    <ClInclude Include="Controller.h" />
+    <ClInclude Include="Area.h" />
+    <ClInclude Include="AreaFloor.h" />
     <ClInclude Include="Cargo.h" />
-    <ClInclude Include="InformationDisplay.h" />
+    <ClInclude Include="Output.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,23 +1,15 @@
-#pragma once
+#ifndef __CARGO__H
+#define __CARGO__H
 
 #include "Base.h"
-#include "CargoPlatform.h"
 
 
-class Cargo : public CargoPlatform
+class Cargo : public Base
 {
-
-private:
-
-	double _length, _width, _height;
-
-
 public:
+	Cargo( Base* parent, string name, int l, int w, int h );
 
-	Cargo( Base* pParent, double length, double width, double height, string name );
-
-	void SignalF( string& message );
-
-	void HandlerF( string message );
-
+	int l, w, h;
 };
+
+#endif
