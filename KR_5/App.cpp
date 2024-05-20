@@ -53,12 +53,6 @@ void App::build_tree()
 	set_connect( SIGNAL_D( Base::signal_f ), output, HANDLER_D( Base::handler_f ) );
 
 	controller->set_connect( SIGNAL_D( Base::signal_f ), output, HANDLER_D( Base::handler_f ) );
-
-	area1->set_connect( SIGNAL_D( Base::signal_f ), output, HANDLER_D( Base::handler_f ) );
-	area2->set_connect( SIGNAL_D( Base::signal_f ), output, HANDLER_D( Base::handler_f ) );
-	area3->set_connect( SIGNAL_D( Base::signal_f ), output, HANDLER_D( Base::handler_f ) );
-	area_floor->set_connect( SIGNAL_D( Base::signal_f ), output, HANDLER_D( Base::handler_f ) );
-
 	input->set_connect( SIGNAL_D( Base::signal_f ), this, HANDLER_D( Base::handler_f ) );
 
 
@@ -203,6 +197,6 @@ int App::exec_app()
 
 void App::SHOWTREE()
 {
-	cout << endl << "Object tree";
+	cout << "\nObject tree";
 	print_tree_states();
 }

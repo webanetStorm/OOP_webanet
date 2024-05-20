@@ -1,13 +1,15 @@
 #include "Output.h"
 #include <iostream>
 
-Output::Output( Base* parent, string name ) : Base( parent, name )
+
+Output::Output( Base* pParent, string name ) : Base( pParent, name )
 {
 }
 
-void Output::handler_f( string command )
+void Output::handler_f( string message )
 {
-	if ( command != "Ready to work" )
-		std::cout << std::endl;
-	std::cout << command;
+	if ( message != "Ready to work" )
+		cout << endl;
+
+	cout << message;
 }
