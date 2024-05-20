@@ -66,8 +66,7 @@ void Area::get_condition( string id )
 					text += ": in area " + nm.substr( nm.size() - 1 ) + ", square " + to_string( i + 1 );
 				else if ( nm.find( "Floor area" ) != string::npos )
 				{
-					//text += ": in floor square " + to_string(i+1);
-					text += ": in floor square " + to_string( 1 );
+					text += ": in floor square " + to_string( i + 1 );
 				}
 
 

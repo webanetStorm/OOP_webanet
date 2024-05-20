@@ -67,9 +67,9 @@ void Controller::find_cargo( string id )
 
 			for ( int i = 0; i < 9; i++ )
 			{
-				bool cond1 = ( area1->squares[i].size() != 0 ) && ( area1 -> squares[i].back()->get_name() == id );
-				bool cond2 = ( area2->squares[i].size() != 0 ) && ( area2 -> squares[i].back()->get_name() == id );
-				bool cond3 = ( area3->squares[i].size() != 0 ) && ( area3 -> squares[i].back()->get_name() == id );
+				bool cond1 = ( area1->squares[i].size() != 0 ) && ( area1->squares[i].back()->get_name() == id );
+				bool cond2 = ( area2->squares[i].size() != 0 ) && ( area2->squares[i].back()->get_name() == id );
+				bool cond3 = ( area3->squares[i].size() != 0 ) && ( area3->squares[i].back()->get_name() == id );
 				if ( cond1 || cond2 || cond3 )
 				{
 					is_in_end = true;
@@ -95,9 +95,6 @@ void Controller::work( string id )
 
 	Cargo* cargo = (Cargo*)get_parent()->find_in_tree( id );
 	Area* area = (Area*)( cargo->get_parent() );
-	//Area* area;
-	//if ( get_parent() != this )
-	//	area = (Area*)( cargo->get_parent() );
 
 	switch ( get_state() )
 	{
