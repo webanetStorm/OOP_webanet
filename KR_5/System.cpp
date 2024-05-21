@@ -126,11 +126,17 @@ int System::ExecApp()
 		else if ( this->_data.find( "Condition of the cargo area" ) != string::npos )
 		{
 			if ( this->_data.find( "1" ) != string::npos )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area1, this->_data );
+			}
 			else if ( this->_data.find( "2" ) != string::npos )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area2, this->_data );
+			}
 			else if ( this->_data.find( "3" ) != string::npos )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area3, this->_data );
+			}
 		}
 		else if ( this->_data.find( "Cargo condition" ) != string::npos )
 		{
@@ -138,13 +144,21 @@ int System::ExecApp()
 			string cargoId = commands[2];
 
 			if ( area1->FindOnTree( cargoId ) )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area1, this->_data );
+			}
 			else if ( area2->FindOnTree( cargoId ) )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area2, this->_data );
+			}
 			else if ( area3->FindOnTree( cargoId ) )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area3, this->_data );
+			}
 			else if ( area_floor->FindOnTree( cargoId ) )
+			{
 				this->EmitSignal( SIGNAL_D( Base::Signal ), area_floor, this->_data );
+			}
 			else if ( controller->FindOnTree( cargoId ) )
 			{
 				this->_data += ": in hook";

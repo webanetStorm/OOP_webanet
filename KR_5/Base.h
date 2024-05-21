@@ -10,8 +10,8 @@
 #include <queue>
 
 
-#define SIGNAL_D( SignalF ) ( TYPE_SIGNAL )( &SignalF )
-#define HANDLER_D( HandlerF ) ( TYPE_HANDLER )( &HandlerF )
+#define SIGNAL_D( func )(TYPE_SIGNAL)( &func )
+#define HANDLER_D( func )(TYPE_HANDLER)( &func )
 
 using namespace std;
 class Base;

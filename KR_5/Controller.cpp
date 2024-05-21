@@ -6,13 +6,13 @@
 #include <cmath>
 
 
-Controller::Controller( Base* pParent, string name ) : Base( pParent, name )
+Controller::Controller( Base* parent, string name ) : Base( parent, name )
 {
 }
 
 void Controller::Handler( string command )
 {
-	vector<string> commands = Explode( command );
+	vector<string> commands = this->Explode( command );
 
 	if ( command.find( "Submit the cargo" ) != string::npos )
 	{
@@ -26,7 +26,7 @@ void Controller::Handler( string command )
 	else if ( command == "" )
 	{
 		if ( this->GetReadiness() != 1 )
-			this->Work( _cargoId );
+			this->Work( this->_cargoId );
 	}
 	else
 	{
@@ -48,13 +48,13 @@ void Controller::FindCargo( string id )
 	}
 	else
 	{
-		auto parent = cargo->GetParent();
+		auto par_obj = cargo->GetParent();
 
-		if ( parent == this )
+		if ( par_obj == this )
 		{
 			text = "The cargo " + id + " is located on the hook of the tower crane";
 		}
-		else if ( parent->GetName() == "Floor area" )
+		else if ( par_obj->GetName() == "Floor area" )
 		{
 			text = "The cargo " + id + " is located on the floor";
 		}
@@ -68,9 +68,7 @@ void Controller::FindCargo( string id )
 
 			for ( int i = 0; i < 9; i++ )
 			{
-				if ( ( area1->Squares[i].size() != 0 ) && ( area1->Squares[i].back()->GetName() == id ) || 
-					( area2->Squares[i].size() != 0 ) && ( area2->Squares[i].back()->GetName() == id ) || 
-					( area3->Squares[i].size() != 0 ) && ( area3->Squares[i].back()->GetName() == id ) )
+				if ( ( area1->Squares[i].size() != 0 ) && ( area1->Squares[i].back()->GetName() == id ) || ( area2->Squares[i].size() != 0 ) && ( area2->Squares[i].back()->GetName() == id ) || ( area3->Squares[i].size() != 0 ) && ( area3->Squares[i].back()->GetName() == id ) )
 				{
 					isInEnd = true;
 					break;
@@ -85,7 +83,7 @@ void Controller::FindCargo( string id )
 	{
 		this->EmitSignal( SIGNAL_D( Base::Signal ), root->GetChildByName( "Output object" ), text );
 	}
-	else 
+	else
 	{
 		this->Work( id );
 	}
@@ -95,9 +93,11 @@ void Controller::Work( string id )
 {
 
 	Cargo* cargo = (Cargo*)GetParent()->FindOnTree( id );
-	Area* area = (Area*)( cargo->GetParent() );
+	Area* area;
+	if ( this->GetParent() != this )
+		area = (Area*)( cargo->GetParent() );
 
-	switch ( GetReadiness() )
+	switch ( this->GetReadiness() )
 	{
 		case 1:
 		{
@@ -108,28 +108,21 @@ void Controller::Work( string id )
 			switch ( area->GetName().back() - '0' )
 			{
 				case 1:
-				{
 					x = 16 - ( squareNumber - 1 ) % 3 * 4;
 					y = 2 + ( squareNumber - 1 ) / 3 * 4;
 					this->_boomAngle = 180 + atan2( y, x ) * 180 / M_PI;
 					break;
-				}
 				case 2:
-				{
 					x = -4 + ( squareNumber - 1 ) % 3 * 4;
 					y = 14 + ( squareNumber - 1 ) / 3 * 4;
 					this->_boomAngle = 180 + atan2( y, x ) * 180 / M_PI + ( 90 - atan2( y, x ) * 180 / M_PI ) * ( ( squareNumber - 1 ) % 3 );
 					break;
-				}
 				case 3:
-				{
 					x = 8 + ( squareNumber - 1 ) % 3 * 4;
 					y = 2 + ( squareNumber - 1 ) / 3 * 4;
 					this->_boomAngle = 360 - atan2( y, x ) * 180 / M_PI;
 					break;
-				}
 			}
-
 			this->_boomLength = sqrt( x * x + y * y );
 
 			break;
@@ -147,7 +140,10 @@ void Controller::Work( string id )
 		}
 		case 4:
 		{
-			int x = 2 - _m / 2 + ( _squareNumber - 1 ) % ( _m / 4 ) * 4, y = 2 + _n - ( _squareNumber - 1 ) / ( _m / 4 ) * 4;
+			int x, y;
+
+			x = 2 - _m / 2 + ( _squareNumber - 1 ) % ( _m / 4 ) * 4;
+			y = 2 + _n - ( _squareNumber - 1 ) / ( _m / 4 ) * 4;
 
 			if ( x == 0 )
 				this->_boomAngle = 90;
@@ -158,14 +154,13 @@ void Controller::Work( string id )
 				this->_boomAngle++;
 
 			this->_boomLength = sqrt( x * x + y * y );
-
 			break;
 		}
 		case 5:
 		{
-			Area* areaFloor = (Area*)( GetParent()->GetChildByName( "Floor area" ) );
-			cargo->SetNewParent( areaFloor );
-			areaFloor->Squares[_squareNumber - 1].push_back( cargo );
+			Area* area_floor = (Area*)( this->GetParent()->GetChildByName( "Floor area" ) );
+			cargo->SetNewParent( area_floor );
+			area_floor->Squares[_squareNumber - 1].push_back( cargo );
 
 			this->_boomAngle = 0;
 			break;
