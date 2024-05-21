@@ -18,7 +18,7 @@
     <ClCompile Include="KR_5.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="App.cpp">
+    <ClCompile Include="System.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Base.cpp">
@@ -44,7 +44,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h">
+    <ClInclude Include="System.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Base.h">

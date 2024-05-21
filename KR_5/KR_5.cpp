@@ -1,11 +1,11 @@
-﻿#include <iostream>
-using namespace std;
+﻿#include "System.h"
 
-#include "App.h"
 
 int main()
 {
-	App app( nullptr );
-	app.build_tree();
-	return app.exec_app();
+	System system( nullptr );
+
+	system.BuildTreeObjects();
+
+	return system.ExecApp();
 }

@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="App.cpp" />
+    <ClCompile Include="System.cpp" />
     <ClCompile Include="Base.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Controller.cpp" />
@@ -138,7 +138,7 @@
     <ClCompile Include="KR_5.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="App.h" />
+    <ClInclude Include="System.h" />
     <ClInclude Include="Base.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Controller.h" />

@@ -1,18 +1,25 @@
 #ifndef __AREAFLOOR__H
 #define __AREAFLOOR__H
 
+
 #include "Area.h"
 
 
 class AreaFloor : public Area
 {
-public:
-	AreaFloor( Base* parent, string name );
-	virtual void handler_f( string command );
 
 private:
-	int n = 0;
-	int m = 0;
+
+	int _n = 0, _m = 0;
+
+
+public:
+
+	AreaFloor( Base* pParent, string name );
+
+	virtual void Handler( string command );
+
 };
+
 
 #endif

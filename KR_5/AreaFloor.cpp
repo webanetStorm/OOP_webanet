@@ -1,26 +1,27 @@
 #include "AreaFloor.h"
 
-AreaFloor::AreaFloor( Base* parent, string name ) : Area( parent, name )
+
+AreaFloor::AreaFloor( Base* pParent, string name ) : Area( pParent, name )
 {
 }
 
-void AreaFloor::handler_f( string command )
+void AreaFloor::Handler( string command )
 {
 	if ( command == "Floor condition" )
 	{
-		check_cargos( command );
+		this->CheckCargos( command );
 	}
 	else if ( command.find( "Cargo condition" ) != string::npos )
 	{
-		vector<string> words = get_words( command );
-		get_condition( words[2] );
+		this->GetCondition( this->Explode( command )[2] );
 	}
 	else
 	{
-		vector<string> words = get_words( command );
+		vector<string> commands = Explode( command );
 
-		n = stoi( words[0] );
-		m = stoi( words[1] );
-		set_count_sqr( n * m / 16 );
+		this->_n = stoi( commands[0] );
+		this->_m = stoi( commands[1] );
+
+		SetCountSqr( _n * _m / 16 );
 	}
 }

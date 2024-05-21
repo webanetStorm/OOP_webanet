@@ -1,76 +1,63 @@
 #include "Area.h"
-#include <iostream>
 
-Area::Area( Base* parent, string name ) : Base( parent, name )
+
+Area::Area( Base* pParent, string name ) : Base( pParent, name )
 {
 }
 
-void Area::handler_f( string command )
+void Area::Handler( string command )
 {
-
 	if ( command.find( "Condition of the cargo area" ) != string::npos )
-		check_cargos( command + " --" );
-
+		this->CheckCargos( command + " --" );
 	else if ( command.find( "Cargo condition" ) != string::npos )
-	{
-		vector<string> words = get_words( command );
-		get_condition( words[2] );
-	}
+		this->GetCondition( this->Explode( command )[2] );
 }
 
-void Area::set_count_sqr( int n )
+void Area::SetCountSqr( int value )
 {
-	for ( int i = 0; i < n; i++ )
-	{
-		squares.push_back( vector<Cargo*>() );
-	}
+	for ( int i = 0; i < value; i++ )
+		Squares.push_back( vector<Cargo*>() );
 }
 
-void Area::check_cargos( string text )
+void Area::CheckCargos( string text )
 {
-	for ( int i = 0; i < squares.size(); i++ )
+	for ( int i = 0; i < this->Squares.size(); i++ )
 	{
-		if ( squares[i].size() != 0 )
+		if ( this->Squares[i].size() != 0 )
 		{
 			text += " s " + to_string( i + 1 ) + ":";
 
-			for ( auto it = squares[i].end() - 1; it != squares[i].begin() - 1; it-- )
-			{
-				text += " " + ( *it )->get_name();
-			}
+			for ( auto it = this->Squares[i].end() - 1; it != this->Squares[i].begin() - 1; it-- )
+				text += " " + ( *it )->GetName();
 		}
 	}
-	auto output = get_parent()->get_child( "Output object" );
 
-	emit_signal( SIGNAL_D( Base::signal_f ), output, text );
+	this->EmitSignal( SIGNAL_D( Base::Signal ), this->GetParent()->GetChildByName( "Output object" ), text );
 
 }
 
-void Area::get_condition( string id )
+void Area::GetCondition( string id )
 {
-
-	auto output = get_parent()->get_child( "Output object" );
 	string text = "Cargo condition " + id;
 
-	for ( int i = 0; i < squares.size(); i++ )
+	for ( int i = 0; i < Squares.size(); i++ )
 	{
-		if ( squares[i].size() == 0 ) continue;
+		if ( Squares[i].size() == 0 ) 
+			continue;
 
-		for ( auto cargo : squares[i] )
+		for ( auto cargo : Squares[i] )
 		{
-			if ( cargo->get_name() == id )
+			if ( cargo->GetName() == id )
 			{
-				string nm = get_name();
+				string name = GetName();
 
-				if ( nm.find( "Cargo area" ) != string::npos )
-					text += ": in area " + nm.substr( nm.size() - 1 ) + ", square " + to_string( i + 1 );
-				else if ( nm.find( "Floor area" ) != string::npos )
-				{
+				if ( name.find( "Cargo area" ) != string::npos )
+					text += ": in area " + name.substr( name.size() - 1 ) + ", square " + to_string( i + 1 );
+				else if ( name.find( "Floor area" ) != string::npos )
 					text += ": in floor square " + to_string( i + 1 );
-				}
 
 
-				emit_signal( SIGNAL_D( Base::signal_f ), output, text );
+				this->EmitSignal( SIGNAL_D( Base::Signal ), this->GetParent()->GetChildByName( "Output object" ), text );
 
 				return;
 			}
@@ -78,28 +65,23 @@ void Area::get_condition( string id )
 	}
 }
 
-int Area::get_num( Cargo* cargo )
+int Area::GetNumber( Cargo* cargo )
 {
-
 	for ( int i = 0; i < 9; i++ )
-	{
-		for ( int j = 0; j < squares[i].size(); j++ )
-		{
-			if ( squares[i][j] == cargo )
+		for ( int j = 0; j < Squares[i].size(); j++ )
+			if ( Squares[i][j] == cargo )
 				return i + 1;
-		}
-	}
 
 	return 0;
 }
 
-void Area::del_from_square( int sqr_num, Base* cargo )
+void Area::DeleteFromSquare( int sqrNumber, Base* cargo )
 {
-	vector<Cargo*>& square = squares[sqr_num - 1];
+	vector<Cargo*>& square = Squares[sqrNumber - 1];
+
 	for ( auto it = square.begin(); it != square.end(); it++ )
 	{
-
-		if ( ( *it )->get_name() == cargo->get_name() )
+		if ( ( *it )->GetName() == cargo->GetName() )
 		{
 			square.erase( it );
 			break;
