@@ -6,7 +6,7 @@
 #include <cmath>
 
 
-Controller::Controller( Base* parent, string name ) : Base( parent, name )
+Controller::Controller( Base* pParent, string name ) : Base( pParent, name )
 {
 }
 
@@ -40,7 +40,7 @@ void Controller::FindCargo( string id )
 {
 	Base* root = this->GetParent();
 	string text = "";
-	auto cargo = root->FindOnTree( id );
+	auto cargo = root->FindOnBranch( id );
 
 	if ( !cargo )
 	{
@@ -48,13 +48,13 @@ void Controller::FindCargo( string id )
 	}
 	else
 	{
-		auto par_obj = cargo->GetParent();
+		auto parent = cargo->GetParent();
 
-		if ( par_obj == this )
+		if ( parent == this )
 		{
 			text = "The cargo " + id + " is located on the hook of the tower crane";
 		}
-		else if ( par_obj->GetName() == "Floor area" )
+		else if ( parent->GetName() == "Floor area" )
 		{
 			text = "The cargo " + id + " is located on the floor";
 		}
@@ -92,7 +92,7 @@ void Controller::FindCargo( string id )
 void Controller::Work( string id )
 {
 
-	Cargo* cargo = (Cargo*)GetParent()->FindOnTree( id );
+	Cargo* cargo = (Cargo*)GetParent()->FindOnBranch( id );
 	Area* area;
 	if ( this->GetParent() != this )
 		area = (Area*)( cargo->GetParent() );
@@ -140,10 +140,7 @@ void Controller::Work( string id )
 		}
 		case 4:
 		{
-			int x, y;
-
-			x = 2 - _m / 2 + ( _squareNumber - 1 ) % ( _m / 4 ) * 4;
-			y = 2 + _n - ( _squareNumber - 1 ) / ( _m / 4 ) * 4;
+			int x = 2 - _m / 2 + ( _squareNumber - 1 ) % ( _m / 4 ) * 4, y = 2 + _n - ( _squareNumber - 1 ) / ( _m / 4 ) * 4;
 
 			if ( x == 0 )
 				this->_boomAngle = 90;
@@ -158,9 +155,9 @@ void Controller::Work( string id )
 		}
 		case 5:
 		{
-			Area* area_floor = (Area*)( this->GetParent()->GetChildByName( "Floor area" ) );
-			cargo->SetNewParent( area_floor );
-			area_floor->Squares[_squareNumber - 1].push_back( cargo );
+			Area* areaFloor = (Area*)( this->GetParent()->GetChildByName( "Floor area" ) );
+			cargo->SetNewParent( areaFloor );
+			areaFloor->Squares[_squareNumber - 1].push_back( cargo );
 
 			this->_boomAngle = 0;
 			break;

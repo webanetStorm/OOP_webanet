@@ -5,6 +5,7 @@
 #include "Base.h"
 #include "Cargo.h"
 
+
 class Area : public Base
 {
 

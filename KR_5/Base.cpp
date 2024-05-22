@@ -243,7 +243,7 @@ void Base::DeleteConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pH
 
 void Base::EmitSignal( TYPE_SIGNAL Signal, Base* object, string& command )
 {
-	if ( !GetReadiness() ) 
+	if ( !GetReadiness() )
 		return;
 
 	TYPE_HANDLER Handler;

@@ -13,7 +13,7 @@ public:
 	int Length, Width, Height;
 
 
-	Cargo( Base* pParent, string name, int length, int width, int height );
+	Cargo( Base* pParent, string name, int l, int w, int h );
 
 };
 

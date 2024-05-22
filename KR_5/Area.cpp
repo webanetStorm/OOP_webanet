@@ -15,19 +15,18 @@ void Area::Handler( string command )
 
 void Area::SetCountSqr( int value )
 {
-	for ( int i = 0; i < value; i++ )
-		Squares.push_back( vector<Cargo*>() );
+	this->Squares = vector<vector<Cargo*>>( value );
 }
 
 void Area::CheckCargos( string text )
 {
 	for ( int i = 0; i < this->Squares.size(); i++ )
 	{
-		if ( this->Squares[i].size() != 0 )
+		if ( !this->Squares[i].empty() )
 		{
 			text += " s " + to_string( i + 1 ) + ":";
 
-			for ( auto it = this->Squares[i].end() - 1; it != this->Squares[i].begin() - 1; it-- )
+			for ( auto it = this->Squares[i].rbegin(); it != this->Squares[i].rend(); it++ )
 				text += " " + ( *it )->GetName();
 		}
 	}
@@ -42,7 +41,7 @@ void Area::GetCondition( string id )
 
 	for ( int i = 0; i < Squares.size(); i++ )
 	{
-		if ( Squares[i].size() == 0 ) 
+		if ( Squares[i].size() == 0 )
 			continue;
 
 		for ( auto cargo : Squares[i] )

@@ -1,7 +1,7 @@
 #include "AreaFloor.h"
 
 
-AreaFloor::AreaFloor( Base* pParent, string name ) : Area( pParent, name )
+AreaFloor::AreaFloor( Base* parent, string name ) : Area( parent, name )
 {
 }
 
@@ -17,11 +17,11 @@ void AreaFloor::Handler( string command )
 	}
 	else
 	{
-		vector<string> commands = Explode( command );
+		vector<string> commands = this->Explode( command );
 
 		this->_n = stoi( commands[0] );
 		this->_m = stoi( commands[1] );
 
-		SetCountSqr( _n * _m / 16 );
+		this->SetCountSqr( this->_n * this->_m / 16 );
 	}
 }

@@ -1,7 +1,7 @@
 #include "Input.h"
 
 
-Input::Input( Base* pParent, string name ) : Base( pParent, name )
+Input::Input( Base* parent, string name ) : Base( parent, name )
 {
 }
 

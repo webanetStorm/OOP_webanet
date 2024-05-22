@@ -10,7 +10,7 @@ class Input : public Base
 
 public:
 
-	Input( Base* _pParent, string _name = "Input object" );
+	Input( Base* parent, string name = "Input object" );
 
 	virtual void Handler( string command );
 

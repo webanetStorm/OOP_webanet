@@ -10,7 +10,7 @@ class Output : public Base
 
 public:
 
-	Output( Base* pParent, string name = "Output object" );
+	Output( Base* parent, string name = "Output object" );
 
 	virtual void Handler( string command );
 

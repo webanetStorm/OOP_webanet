@@ -1,7 +1,7 @@
 #include "Output.h"
 
 
-Output::Output( Base* pParent, string name ) : Base( pParent, name )
+Output::Output( Base* parent, string name ) : Base( parent, name )
 {
 }
 

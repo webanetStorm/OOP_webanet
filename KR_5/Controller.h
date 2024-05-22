@@ -4,7 +4,6 @@
 
 #include "Base.h"
 
-
 class Controller : public Base
 {
 
@@ -17,7 +16,7 @@ private:
 
 public:
 
-	Controller( Base* _pParent, string _name = "Controller object" );
+	Controller( Base* pParent, string name = "Controller object" );
 
 	void FindCargo( string id );
 
