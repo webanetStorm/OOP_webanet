@@ -21,7 +21,9 @@ void Controller::Handler( string command )
 	}
 	else if ( command == "Condition of the tower crane" )
 	{
-		this->CraneInfo();
+		string text = "Tower crane " + to_string( this->_boomAngle ) + "  " + to_string( this->_boomLength );
+
+		this->EmitSignal( SIGNAL_D( Base::Signal ), this->GetParent()->GetChildByName( "Output object" ), text );
 	}
 	else if ( command == "" )
 	{
@@ -173,11 +175,4 @@ void Controller::Work( string id )
 
 	if ( this->GetReadiness() > 6 )
 		this->SetReadiness( 1 );
-}
-
-void Controller::CraneInfo()
-{
-	string text = "Tower crane " + to_string( this->_boomAngle ) + "  " + to_string( this->_boomLength );
-
-	this->EmitSignal( SIGNAL_D( Base::Signal ), this->GetParent()->GetChildByName( "Output object" ), text );
 }

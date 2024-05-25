@@ -22,8 +22,6 @@ public:
 
 	void Work( string id = 0 );
 
-	void CraneInfo();
-
 	virtual void Handler( string command );
 
 };
