@@ -13,7 +13,7 @@ void Area::Handler( string command )
 		this->GetCondition( this->Explode( command )[2] );
 }
 
-void Area::SetCountSqr( int value )
+void Area::SetCountSquares( int value )
 {
 	this->Squares = vector<vector<Cargo*>>( value );
 }

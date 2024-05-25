@@ -18,7 +18,7 @@ void System::Handler( string command )
 
 void System::BuildTreeObjects()
 {
-	Base* input = new Input( this );
+	auto input = new Input( this );
 	auto controller = new Controller( this );
 	auto area1 = new Area( this, "Cargo area 1" );
 	auto area2 = new Area( this, "Cargo area 2" );
@@ -26,17 +26,9 @@ void System::BuildTreeObjects()
 	auto areaFloor = new AreaFloor( this, "Floor area" );
 	auto output = new Output( this );
 
-	area1->SetCountSqr( 9 );
-	area2->SetCountSqr( 9 );
-	area3->SetCountSqr( 9 );
-
-	input->SetReadiness( 1 );
-	controller->SetReadiness( 1 );
-	area1->SetReadiness( 1 );
-	area2->SetReadiness( 1 );
-	area3->SetReadiness( 1 );
-	areaFloor->SetReadiness( 1 );
-	output->SetReadiness( 1 );
+	area1->SetCountSquares( 9 );
+	area2->SetCountSquares( 9 );
+	area3->SetCountSquares( 9 );
 
 	this->SetConnection( SIGNAL_D( Base::Signal ), input, HANDLER_D( Base::Handler ) );
 	this->SetConnection( SIGNAL_D( Base::Signal ), controller, HANDLER_D( Base::Handler ) );

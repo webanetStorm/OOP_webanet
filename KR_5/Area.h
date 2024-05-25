@@ -11,14 +11,12 @@ class Area : public Base
 
 public:
 
-	int CountSqr = 0;
-
 	vector<vector<Cargo*>> Squares;
 
 
 	Area( Base* pParent, string name );
 
-	void SetCountSqr( int value );
+	void SetCountSquares( int value );
 
 	void CheckCargos( string text );
 
