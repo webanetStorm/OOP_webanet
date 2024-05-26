@@ -40,9 +40,8 @@ void Controller::Handler( string command )
 
 void Controller::FindCargo( string id )
 {
-	Base* root = this->GetParent();
-	string text = "";
-	auto cargo = root->FindOnBranch( id );
+	auto root = this->GetParent(), cargo = root->FindOnBranch( id );
+	string text;
 
 	if ( !cargo )
 	{
@@ -62,10 +61,7 @@ void Controller::FindCargo( string id )
 		}
 		else
 		{
-			Area* area1 = (Area*)root->GetChildByName( "Cargo area 1" );
-			Area* area2 = (Area*)root->GetChildByName( "Cargo area 2" );
-			Area* area3 = (Area*)root->GetChildByName( "Cargo area 3" );
-
+			Area *area1 = (Area*)root->GetChildByName( "Cargo area 1" ), *area2 = (Area*)root->GetChildByName( "Cargo area 2" ), *area3 = (Area*)root->GetChildByName( "Cargo area 3" );
 			bool isInEnd = false;
 
 			for ( int i = 0; i < 9; i++ )
@@ -81,20 +77,13 @@ void Controller::FindCargo( string id )
 				text = "The cargo " + id + " is not available";
 		}
 	}
-	if ( text != "" )
-	{
-		this->EmitSignal( SIGNAL_D( Base::Signal ), root->GetChildByName( "Output object" ), text );
-	}
-	else
-	{
-		this->Work( id );
-	}
+
+	text != "" ? this->EmitSignal( SIGNAL_D( Base::Signal ), root->GetChildByName( "Output object" ), text ) : this->Work( id );
 }
 
 void Controller::Work( string id )
 {
-
-	Cargo* cargo = (Cargo*)GetParent()->FindOnBranch( id );
+	Cargo* cargo = (Cargo*)this->GetParent()->FindOnBranch( id );
 	Area* area;
 	if ( this->GetParent() != this )
 		area = (Area*)( cargo->GetParent() );
@@ -142,7 +131,7 @@ void Controller::Work( string id )
 		}
 		case 4:
 		{
-			int x = 2 - _m / 2 + ( _squareNumber - 1 ) % ( _m / 4 ) * 4, y = 2 + _n - ( _squareNumber - 1 ) / ( _m / 4 ) * 4;
+			int x = 2 - this->_m / 2 + ( this->_squareNumber - 1 ) % ( this->_m / 4 ) * 4, y = 2 + this->_n - ( this->_squareNumber - 1 ) / ( this->_m / 4 ) * 4;
 
 			if ( x == 0 )
 				this->_boomAngle = 90;
@@ -159,7 +148,7 @@ void Controller::Work( string id )
 		{
 			Area* areaFloor = (Area*)( this->GetParent()->GetChildByName( "Floor area" ) );
 			cargo->SetNewParent( areaFloor );
-			areaFloor->Squares[_squareNumber - 1].push_back( cargo );
+			areaFloor->Squares[this->_squareNumber - 1].push_back( cargo );
 
 			this->_boomAngle = 0;
 			break;

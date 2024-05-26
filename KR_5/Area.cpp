@@ -32,7 +32,6 @@ void Area::CheckCargos( string text )
 	}
 
 	this->EmitSignal( SIGNAL_D( Base::Signal ), this->GetParent()->GetChildByName( "Output object" ), text );
-
 }
 
 void Area::GetCondition( string id )

@@ -87,7 +87,6 @@ void System::BuildTreeObjects()
 	}
 }
 
-
 int System::ExecApp()
 {
 	Input* input = (Input*)( this->GetChildByName( "Input object" ) );
