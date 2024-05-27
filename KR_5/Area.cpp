@@ -38,12 +38,9 @@ void Area::GetCondition( string id )
 {
 	string text = "Cargo condition " + id;
 
-	for ( int i = 0; i < Squares.size(); i++ )
+	for ( int i = 0; i < this->Squares.size(); i++ )
 	{
-		if ( Squares[i].size() == 0 )
-			continue;
-
-		for ( auto cargo : Squares[i] )
+		for ( auto cargo : this->Squares[i] )
 		{
 			if ( cargo->GetName() == id )
 			{
@@ -66,8 +63,8 @@ void Area::GetCondition( string id )
 int Area::GetNumber( Cargo* cargo )
 {
 	for ( int i = 0; i < 9; i++ )
-		for ( int j = 0; j < Squares[i].size(); j++ )
-			if ( Squares[i][j] == cargo )
+		for ( int j = 0; j < this->Squares[i].size(); j++ )
+			if ( this->Squares[i][j] == cargo )
 				return i + 1;
 
 	return 0;
@@ -75,7 +72,7 @@ int Area::GetNumber( Cargo* cargo )
 
 void Area::DeleteFromSquare( int sqrNumber, Base* cargo )
 {
-	vector<Cargo*>& square = Squares[sqrNumber - 1];
+	vector<Cargo*>& square = this->Squares[sqrNumber - 1];
 
 	for ( auto it = square.begin(); it != square.end(); it++ )
 	{
