@@ -1,9 +1,4 @@
-﻿#define _CRTDBG_MAP_ALLOC
-#include <crtdbg.h>
-#define DBG_NEW new( _NORMAL_BLOCK , __FILE__ , __LINE__ )
-#define newDBG_NEW
-
-#include "System.h"
+﻿#include "System.h"
 
 
 int main()
@@ -12,7 +7,5 @@ int main()
 
 	system.BuildTreeObjects();
 
-	system.ExecApp();
-	_CrtDumpMemoryLeaks();
-	return 0;
+	return system.ExecApp();
 }
