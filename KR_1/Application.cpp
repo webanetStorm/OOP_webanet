@@ -23,6 +23,8 @@ void Application::BuildTreeObjects()
         if ( pParentObject->GetChildByName( childName ) == nullptr && parentName == pParentObject->GetObjectName() )
             pChildObject = new Class1( pParentObject, childName );
     }
+
+    delete pChildObject;
 }
 
 int Application::ExecApp()

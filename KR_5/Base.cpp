@@ -9,10 +9,10 @@ Base::Base( Base* pParent, string name ) : _pParent( pParent ), _name( name )
 
 Base::~Base()
 {
-	this->GetRoot()->DeleteLinks( this );
-
 	for ( auto pChild : this->_children )
 		delete pChild;
+
+	this->GetRoot()->DeleteLinks( this );
 }
 
 bool Base::SetName( string name )
@@ -228,17 +228,14 @@ void Base::SetConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pHand
 
 void Base::DeleteConnection( TYPE_SIGNAL pSignal, Base* pTarget, TYPE_HANDLER pHandler )
 {
-	remove_if( this->_connections.begin(), this->_connections.end(), [&]( Connection* connection )
+	for ( auto it = this->_connections.begin(); it != this->_connections.end(); it++ )
 	{
-		if ( connection->Signal == pSignal && connection->Target == pTarget && connection->Handler == pHandler )
+		if ( ( *it )->Signal == pSignal && ( *it )->Target == pTarget && ( *it )->Handler == pHandler )
 		{
-			delete connection;
-
-			return true;
+			this->_connections.erase( it );
+			break;
 		}
-
-		return false;
-	} );
+	}
 }
 
 void Base::EmitSignal( TYPE_SIGNAL Signal, Base* object, string& command )
@@ -272,17 +269,15 @@ void Base::EmitSignal( TYPE_SIGNAL Signal, Base* object, string& command )
 
 void Base::DeleteLinks( Base* pTarget )
 {
-	remove_if( this->_connections.begin(), this->_connections.end(), [pTarget]( Connection* connection )
+	for ( auto it = this->_connections.begin(); it != this->_connections.end(); it++ )
 	{
-		if ( connection->Target == pTarget )
+		if ( ( *it )->Target == pTarget )
 		{
-			delete connection;
-
-			return true;
+			delete ( *it );
+			this->_connections.erase( it );
+			it--;
 		}
-
-		return false;
-	} );
+	}
 
 	for ( auto pChild : this->_children )
 		pChild->DeleteLinks( pTarget );

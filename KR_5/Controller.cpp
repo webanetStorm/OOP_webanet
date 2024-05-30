@@ -84,9 +84,7 @@ void Controller::FindCargo( string id )
 void Controller::Work( string id )
 {
 	Cargo* cargo = (Cargo*)this->GetParent()->FindOnBranch( id );
-	Area* area;
-	if ( this->GetParent() != this )
-		area = (Area*)( cargo->GetParent() );
+	Area* area = (Area*)( cargo->GetParent() );
 
 	switch ( this->GetReadiness() )
 	{
