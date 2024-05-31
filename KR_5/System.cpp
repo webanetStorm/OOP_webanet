@@ -182,8 +182,6 @@ int System::ExecApp()
 		this->EmitSignal( SIGNAL_D( Base::Signal ), controller, this->_data );
 	}
 
-	delete input, delete controller, delete area1, delete area2, delete area3, delete areaFloor, delete output;
-
 
 	return 0;
 }

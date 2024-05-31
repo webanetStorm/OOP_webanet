@@ -11,8 +11,6 @@ Base::~Base()
 {
 	for ( auto pChild : this->_children )
 		delete pChild;
-
-	this->GetRoot()->DeleteLinks( this );
 }
 
 bool Base::SetName( string name )
